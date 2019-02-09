@@ -1,0 +1,45 @@
+{
+  "name": "api-ts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "go": "ts-node ./src/server.ts",
+    "start": "nodemon ./dist/server.js",
+    "prod": "npm run build && npm run start"
+  },
+  "dependencies": {
+    "@types/express": "^4.16.1",
+    "axios": "^0.18.0",
+    "bcrypt": "^3.0.3",
+    "bcrypt-nodejs": "^0.0.3",
+    "body-parser": "^1.18.3",
+    "chalk": "^2.4.2",
+    "compression": "^1.7.3",
+    "connect-redis": "^3.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "express-list-endpoints": "^4.0.0",
+    "express-rate-limit": "^3.3.2",
+    "express-session": "^1.15.6",
+    "express-validator": "^5.3.1",
+    "fbgraph": "^1.4.4",
+    "helmet": "^3.15.0",
+    "jsonwebtoken": "^8.4.0",
+    "memory-cache": "^0.2.0",
+    "moment": "^2.24.0",
+    "mongoose": "^5.4.6",
+    "nodemon": "^1.18.9",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "pg": "^7.8.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.42.0",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "faker": "^4.1.0"
+  }
+}
