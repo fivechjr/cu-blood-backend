@@ -6,9 +6,14 @@ import { School } from './model.school';
 import chalk from 'chalk'
 
 const User = sequelize.define('user', {
+    id: {
+        type: Sequelize.INTEGER(11),
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true
+    },
     uuid: {
-        type: Sequelize.UUID,
-        unique: true
+        type: Sequelize.UUID
     },
     firstName: {type: Sequelize.STRING},
     lastName: {type: Sequelize.STRING},
@@ -21,13 +26,11 @@ const User = sequelize.define('user', {
     },
     username: {
         type: Sequelize.STRING,
-        unique: true
     },
     password: {type: Sequelize.STRING},
     medicalCondition: {type: Sequelize.STRING},
     studentId: {
         type: Sequelize.STRING,
-        unique: true
     },
     weight: {type: Sequelize.INTEGER},
     phoneNumber: {type: Sequelize.STRING},
@@ -62,6 +65,12 @@ const User = sequelize.define('user', {
 }, {
     underscored: false,
     underscoredAll: false,
+    indexes: [
+        {
+            unique: true,
+            fields: ['uuid', 'username', 'studentId']
+        }
+    ],
     hooks: {
         beforeCreate: async function (user) {
             const salt = await bcrypt.genSalt(12)

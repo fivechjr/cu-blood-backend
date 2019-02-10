@@ -94,20 +94,19 @@ class Routes {
             isValidated
         ], async (req: Request, res: Response) => {
             try {
-                let count = await User.count({
-                    where: {
-                        [sequelize.Op.or]: [{username: (req.body.username).toLowerCase()}, {studentId: String(req.body.studentId).toLowerCase()}]
-                    }
-                })
-                if (count > 0) {
-                    apiResponse(res, 400)
-                    return
-                } else {
-                    let data = await User.create(req.body)
-                    // console.log(data)
-                    apiResponse(res, 200)
-                    return
-                }
+                // let count = await User.count({
+                //     where: {
+                //         [sequelize.Op.or]: [{username: (req.body.username).toLowerCase()}, {studentId: String(req.body.studentId).toLowerCase()}]
+                //     }
+                // })
+                // if (count > 0) {
+                //     apiResponse(res, 400)
+                //     return
+                // }
+                let data = await User.create(req.body)
+                // console.log(data)
+                apiResponse(res, 200)
+                return
             } catch (e) {
                 console.log(e)
                 apiResponse(res, 500)
@@ -133,19 +132,20 @@ class Routes {
                     req.body.studentId = String(req.body.studentId)
                 }
 
-                if (req.body.studentId || req.body.username) {
-                    let studentId = req.body.studentId ? '' : req.body.studentId
-                    let username = req.body.username ? '' : req.body.username
-                    let count = await User.count({
-                        where: {
-                            [sequelize.Op.or]: [{username: (req.body.username).toLowerCase()}, {studentId: String(req.body.studentId).toLowerCase()}]
-                        }
-                    })
-                    if (count > 0) {
-                        apiResponse(res, 400)
-                        return
-                    }
-                }
+                // if (req.body.studentId != req.user.studentId || req.body.username != req.user.username) {
+                //     let studentId = (req.body.studentId != req.user.studentId) ? '' : req.body.studentId
+                //     let username = req.body.username ? '' : req.body.username
+                //     let count = await User.count({
+                //         where: {
+                //             [sequelize.Op.or]: [{username: (req.body.username).toLowerCase()}, {studentId: String(req.body.studentId).toLowerCase()}]
+                //         }
+                //     })
+                //     if (count > 0) {
+                //         apiResponse(res, 400)
+                //         return
+                //     }
+                // }
+
                 let options = {
                     where: {
                         id: req.user.id
@@ -155,7 +155,7 @@ class Routes {
                 apiResponse(res, 200)
                 return
             } catch (e) {
-                apiResponse(res, 500)
+                apiResponse(res, 400)
             }
         })
 

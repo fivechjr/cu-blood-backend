@@ -21,7 +21,6 @@ const md_is_internal_request_1 = require("../middlewares/md.is-internal-request"
 require("../utils/util.passport");
 const moment = require("moment");
 const model_time_1 = require("../models/model.time");
-const util_database_1 = require("../utils/util.database");
 const chalk_1 = require("chalk");
 class Routes {
     constructor() {
@@ -99,21 +98,19 @@ class Routes {
             util_validation_1.isValidated
         ], (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                let count = yield model_user_1.User.count({
-                    where: {
-                        [util_database_1.sequelize.Op.or]: [{ username: (req.body.username).toLowerCase() }, { studentId: String(req.body.studentId).toLowerCase() }]
-                    }
-                });
-                if (count > 0) {
-                    util_response_1.apiResponse(res, 400);
-                    return;
-                }
-                else {
-                    let data = yield model_user_1.User.create(req.body);
-                    // console.log(data)
-                    util_response_1.apiResponse(res, 200);
-                    return;
-                }
+                // let count = await User.count({
+                //     where: {
+                //         [sequelize.Op.or]: [{username: (req.body.username).toLowerCase()}, {studentId: String(req.body.studentId).toLowerCase()}]
+                //     }
+                // })
+                // if (count > 0) {
+                //     apiResponse(res, 400)
+                //     return
+                // }
+                let data = yield model_user_1.User.create(req.body);
+                // console.log(data)
+                util_response_1.apiResponse(res, 200);
+                return;
             }
             catch (e) {
                 console.log(e);
@@ -136,19 +133,19 @@ class Routes {
                 if (req.body && req.body.studentId) {
                     req.body.studentId = String(req.body.studentId);
                 }
-                if (req.body.studentId || req.body.username) {
-                    let studentId = req.body.studentId ? '' : req.body.studentId;
-                    let username = req.body.username ? '' : req.body.username;
-                    let count = yield model_user_1.User.count({
-                        where: {
-                            [util_database_1.sequelize.Op.or]: [{ username: (req.body.username).toLowerCase() }, { studentId: String(req.body.studentId).toLowerCase() }]
-                        }
-                    });
-                    if (count > 0) {
-                        util_response_1.apiResponse(res, 400);
-                        return;
-                    }
-                }
+                // if (req.body.studentId != req.user.studentId || req.body.username != req.user.username) {
+                //     let studentId = (req.body.studentId != req.user.studentId) ? '' : req.body.studentId
+                //     let username = req.body.username ? '' : req.body.username
+                //     let count = await User.count({
+                //         where: {
+                //             [sequelize.Op.or]: [{username: (req.body.username).toLowerCase()}, {studentId: String(req.body.studentId).toLowerCase()}]
+                //         }
+                //     })
+                //     if (count > 0) {
+                //         apiResponse(res, 400)
+                //         return
+                //     }
+                // }
                 let options = {
                     where: {
                         id: req.user.id
@@ -159,7 +156,7 @@ class Routes {
                 return;
             }
             catch (e) {
-                util_response_1.apiResponse(res, 500);
+                util_response_1.apiResponse(res, 400);
             }
         }));
         this.router.get('/me/sessions', [

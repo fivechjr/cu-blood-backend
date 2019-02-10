@@ -14,9 +14,14 @@ const bcrypt = require("bcrypt");
 const util_database_1 = require("../utils/util.database");
 const model_school_1 = require("./model.school");
 const User = util_database_1.sequelize.define('user', {
+    id: {
+        type: sequelize_1.default.INTEGER(11),
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true
+    },
     uuid: {
-        type: sequelize_1.default.UUID,
-        unique: true
+        type: sequelize_1.default.UUID
     },
     firstName: { type: sequelize_1.default.STRING },
     lastName: { type: sequelize_1.default.STRING },
@@ -29,13 +34,11 @@ const User = util_database_1.sequelize.define('user', {
     },
     username: {
         type: sequelize_1.default.STRING,
-        unique: true
     },
     password: { type: sequelize_1.default.STRING },
     medicalCondition: { type: sequelize_1.default.STRING },
     studentId: {
         type: sequelize_1.default.STRING,
-        unique: true
     },
     weight: { type: sequelize_1.default.INTEGER },
     phoneNumber: { type: sequelize_1.default.STRING },
@@ -70,6 +73,12 @@ const User = util_database_1.sequelize.define('user', {
 }, {
     underscored: false,
     underscoredAll: false,
+    indexes: [
+        {
+            unique: true,
+            fields: ['uuid', 'username', 'studentId']
+        }
+    ],
     hooks: {
         beforeCreate: function (user) {
             return __awaiter(this, void 0, void 0, function* () {
