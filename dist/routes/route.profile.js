@@ -136,8 +136,19 @@ class Routes {
                 if (req.body && req.body.studentId) {
                     req.body.studentId = String(req.body.studentId);
                 }
-                // console.log(chalk.bgGreen('Request Body'))
-                // console.log(JSON.stringify(req.body, null, "\t"))
+                if (req.body.studentId || req.body.username) {
+                    let studentId = req.body.studentId ? '' : req.body.studentId;
+                    let username = req.body.username ? '' : req.body.username;
+                    let count = yield model_user_1.User.count({
+                        where: {
+                            [util_database_1.sequelize.Op.or]: [{ username: (req.body.username).toLowerCase() }, { studentId: String(req.body.studentId).toLowerCase() }]
+                        }
+                    });
+                    if (count > 0) {
+                        util_response_1.apiResponse(res, 400);
+                        return;
+                    }
+                }
                 let options = {
                     where: {
                         id: req.user.id
