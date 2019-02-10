@@ -82,9 +82,6 @@ const User = util_database_1.sequelize.define('user', {
         },
         beforeUpdate: function (user) {
             return __awaiter(this, void 0, void 0, function* () {
-                // console.log(chalk.bgYellow('beforeUpdate'))
-                // console.log(chalk.yellow('user.username', user.username))
-                // console.log(chalk.yellow('user.password', user.password))
                 if (user.changed('password') && user.password != null) {
                     const salt = yield bcrypt.genSalt(12);
                     const hash = yield bcrypt.hash(user.password, salt);

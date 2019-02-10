@@ -11,9 +11,9 @@ import { isValidated } from '../utils/util.validation'
 import { isAuthenticated } from '../middlewares/md.is-authenticated'
 import { verifyInternalRequest } from '../middlewares/md.is-internal-request'
 import '../utils/util.passport'
-import moment = require('moment');
-import { School } from '../models/model.school';
-import { Time } from '../models/model.time';
+import moment = require('moment')
+import { Time } from '../models/model.time'
+import { sequelize } from 'utils/util.database';
 import chalk from 'chalk';
 
 class Routes {
@@ -94,10 +94,20 @@ class Routes {
             isValidated
         ], async (req: Request, res: Response) => {
             try {
-                let data = await User.create(req.body)
-                // console.log(data)
-                apiResponse(res, 200)
-                return
+                let count = await User.count({
+                    where: {
+                        [sequelize.Op.or]: [{username: req.body.username.toLowerCase()}, {studentId: req.body.studentId.toLowerCase()}]
+                    }
+                })
+                if (count > 0) {
+                    apiResponse(res, 400)
+                    return
+                } else {
+                    let data = await User.create(req.body)
+                    // console.log(data)
+                    apiResponse(res, 200)
+                    return
+                }
             } catch (e) {
                 console.log(e)
                 apiResponse(res, 500)
@@ -122,8 +132,8 @@ class Routes {
                 if (req.body && req.body.studentId) {
                     req.body.studentId = String(req.body.studentId)
                 }
-                console.log(chalk.bgGreen('Request Body'))
-                console.log(JSON.stringify(req.body, null, "\t"))
+                // console.log(chalk.bgGreen('Request Body'))
+                // console.log(JSON.stringify(req.body, null, "\t"))
                 let options = {
                     where: {
                         id: req.user.id
@@ -163,11 +173,13 @@ class Routes {
             body('sessionId').isUUID(4),
             body('locationId').isInt(),
             body('timeSlot').isISO8601(),
+            body('timeId').isInt(),
             isValidated
         ], async (req: PassportRequestEntity, res: Response) => {
             let sessionId = req.body.sessionId
             let locationId = req.body.locationId
             let timeSlot = moment(req.body.timeSlot).utcOffset('420')
+            let timeId = req.body.timeId
             try {
                 let sessionOptions = {
                     where: {
@@ -200,7 +212,7 @@ class Routes {
                             id: sessionId
                         }
                     }
-                    let data = await Session.update({ locationId, timeSlot }, options)
+                    let data = await Session.update({ locationId, timeSlot, timeId }, options)
                     apiResponse(res, 200)
                     return
                 } else {
@@ -271,6 +283,8 @@ class Routes {
                                 apiResponse(res, 200, toSessionEntity(session))
                                 return
                             } catch (e) {
+                                console.log(chalk.bgRed('ERROR'))
+                                console.log(e)
                                 apiResponse(res, 500)
                                 return
                             }

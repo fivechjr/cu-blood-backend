@@ -71,10 +71,6 @@ const User = sequelize.define('user', {
             user.uuid = uuidv4()
         },
         beforeUpdate: async function (user) {
-            // console.log(chalk.bgYellow('beforeUpdate'))
-            // console.log(chalk.yellow('user.username', user.username))
-            // console.log(chalk.yellow('user.password', user.password))
-            
             if (user.changed('password') && user.password != null) {
                 const salt = await bcrypt.genSalt(12)
                 const hash = await bcrypt.hash(user.password, salt)

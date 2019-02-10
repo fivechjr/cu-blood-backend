@@ -21,6 +21,7 @@ const md_is_internal_request_1 = require("../middlewares/md.is-internal-request"
 require("../utils/util.passport");
 const moment = require("moment");
 const model_time_1 = require("../models/model.time");
+const util_database_1 = require("utils/util.database");
 const chalk_1 = require("chalk");
 class Routes {
     constructor() {
@@ -98,10 +99,21 @@ class Routes {
             util_validation_1.isValidated
         ], (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                let data = yield model_user_1.User.create(req.body);
-                // console.log(data)
-                util_response_1.apiResponse(res, 200);
-                return;
+                let count = yield model_user_1.User.count({
+                    where: {
+                        [util_database_1.sequelize.Op.or]: [{ username: req.body.username.toLowerCase() }, { studentId: req.body.studentId.toLowerCase() }]
+                    }
+                });
+                if (count > 0) {
+                    util_response_1.apiResponse(res, 400);
+                    return;
+                }
+                else {
+                    let data = yield model_user_1.User.create(req.body);
+                    // console.log(data)
+                    util_response_1.apiResponse(res, 200);
+                    return;
+                }
             }
             catch (e) {
                 console.log(e);
@@ -124,8 +136,8 @@ class Routes {
                 if (req.body && req.body.studentId) {
                     req.body.studentId = String(req.body.studentId);
                 }
-                console.log(chalk_1.default.bgGreen('Request Body'));
-                console.log(JSON.stringify(req.body, null, "\t"));
+                // console.log(chalk.bgGreen('Request Body'))
+                // console.log(JSON.stringify(req.body, null, "\t"))
                 let options = {
                     where: {
                         id: req.user.id
@@ -165,11 +177,13 @@ class Routes {
             check_1.body('sessionId').isUUID(4),
             check_1.body('locationId').isInt(),
             check_1.body('timeSlot').isISO8601(),
+            check_1.body('timeId').isInt(),
             util_validation_1.isValidated
         ], (req, res) => __awaiter(this, void 0, void 0, function* () {
             let sessionId = req.body.sessionId;
             let locationId = req.body.locationId;
             let timeSlot = moment(req.body.timeSlot).utcOffset('420');
+            let timeId = req.body.timeId;
             try {
                 let sessionOptions = {
                     where: {
@@ -199,7 +213,7 @@ class Routes {
                             id: sessionId
                         }
                     };
-                    let data = yield model_session_1.Session.update({ locationId, timeSlot }, options);
+                    let data = yield model_session_1.Session.update({ locationId, timeSlot, timeId }, options);
                     util_response_1.apiResponse(res, 200);
                     return;
                 }
@@ -272,6 +286,8 @@ class Routes {
                                 return;
                             }
                             catch (e) {
+                                console.log(chalk_1.default.bgRed('ERROR'));
+                                console.log(e);
                                 util_response_1.apiResponse(res, 500);
                                 return;
                             }
