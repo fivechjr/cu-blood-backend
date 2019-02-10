@@ -7,7 +7,7 @@ import chalk from 'chalk'
 
 const User = sequelize.define('user', {
     id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true

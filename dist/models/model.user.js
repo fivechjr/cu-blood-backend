@@ -15,7 +15,7 @@ const util_database_1 = require("../utils/util.database");
 const model_school_1 = require("./model.school");
 const User = util_database_1.sequelize.define('user', {
     id: {
-        type: sequelize_1.default.INTEGER(11),
+        type: sequelize_1.default.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true
