@@ -96,7 +96,7 @@ class Routes {
             try {
                 let count = await User.count({
                     where: {
-                        [sequelize.Op.or]: [{username: req.body.username.toLowerCase()}, {studentId: req.body.studentId.toLowerCase()}]
+                        [sequelize.Op.or]: [{username: (req.body.username).toLowerCase()}, {studentId: String(req.body.studentId).toLowerCase()}]
                     }
                 })
                 if (count > 0) {
