@@ -21,7 +21,7 @@ const md_is_internal_request_1 = require("../middlewares/md.is-internal-request"
 require("../utils/util.passport");
 const moment = require("moment");
 const model_time_1 = require("../models/model.time");
-const util_database_1 = require("utils/util.database");
+const util_database_1 = require("../utils/util.database");
 const chalk_1 = require("chalk");
 class Routes {
     constructor() {

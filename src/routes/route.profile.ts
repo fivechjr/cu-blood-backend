@@ -13,7 +13,7 @@ import { verifyInternalRequest } from '../middlewares/md.is-internal-request'
 import '../utils/util.passport'
 import moment = require('moment')
 import { Time } from '../models/model.time'
-import { sequelize } from 'utils/util.database';
+import { sequelize } from '../utils/util.database';
 import chalk from 'chalk';
 
 class Routes {
