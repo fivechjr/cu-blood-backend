@@ -16,6 +16,7 @@ function forceSync() {
             process.exit();
         }
         catch (e) {
+            console.log(e);
             process.exit();
         }
     });
