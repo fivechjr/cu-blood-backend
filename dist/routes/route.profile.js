@@ -149,7 +149,8 @@ class Routes {
                 let options = {
                     where: {
                         id: req.user.id
-                    }
+                    },
+                    individualHooks: true
                 };
                 let data = yield model_user_1.User.update(req.body, options);
                 util_response_1.apiResponse(res, 200);
@@ -198,8 +199,8 @@ class Routes {
                         id: sessionId
                     }
                 };
-                let session = yield model_session_1.Session.findOne(sessionOptions);
-                if (session === null) {
+                let session = yield model_session_1.Session.count(sessionOptions);
+                if (session != 1) {
                     util_response_1.apiResponse(res, 400);
                     return;
                 }

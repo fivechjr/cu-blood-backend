@@ -68,7 +68,15 @@ const User = sequelize.define('user', {
     indexes: [
         {
             unique: true,
-            fields: ['uuid', 'username', 'studentId']
+            fields: ['uuid']
+        },
+        {
+            unique: true,
+            fields: ['username']
+        },
+        {
+            unique: true,
+            fields: ['studentId']
         }
     ],
     hooks: {
@@ -86,7 +94,7 @@ const User = sequelize.define('user', {
                 user.password = hash
             }
 
-            if (user.changed('username') && user.username != null) {
+            if (user.changed('username') && user.password != null) {
                 user.username = user.username.toLowerCase()
             }
         }

@@ -76,7 +76,15 @@ const User = util_database_1.sequelize.define('user', {
     indexes: [
         {
             unique: true,
-            fields: ['uuid', 'username', 'studentId']
+            fields: ['uuid']
+        },
+        {
+            unique: true,
+            fields: ['username']
+        },
+        {
+            unique: true,
+            fields: ['studentId']
         }
     ],
     hooks: {
@@ -96,7 +104,7 @@ const User = util_database_1.sequelize.define('user', {
                     const hash = yield bcrypt.hash(user.password, salt);
                     user.password = hash;
                 }
-                if (user.changed('username') && user.username != null) {
+                if (user.changed('username') && user.password != null) {
                     user.username = user.username.toLowerCase();
                 }
             });

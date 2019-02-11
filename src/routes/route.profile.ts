@@ -149,7 +149,8 @@ class Routes {
                 let options = {
                     where: {
                         id: req.user.id
-                    }
+                    },
+                    individualHooks: true
                 }
                 let data = await User.update(req.body, options)
                 apiResponse(res, 200)
@@ -198,8 +199,8 @@ class Routes {
                         id: sessionId
                     }
                 }
-                let session = await Session.findOne(sessionOptions)
-                if (session === null) {
+                let session = await Session.count(sessionOptions)
+                if (session != 1) {
                     apiResponse(res, 400)
                     return
                 }
