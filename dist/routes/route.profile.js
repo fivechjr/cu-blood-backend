@@ -199,9 +199,9 @@ class Routes {
                         id: sessionId
                     }
                 };
-                let session = yield model_session_1.Session.count(sessionOptions);
-                if (session != 1) {
-                    console.log('[-] session != 1', session);
+                let session = yield model_session_1.Session.findOne(sessionOptions);
+                if (session === 1) {
+                    console.log('[-] session === null', session);
                     util_response_1.apiResponse(res, 400);
                     return;
                 }
@@ -212,7 +212,7 @@ class Routes {
                 };
                 let project = yield model_project_1.Project.findOne(projectOptions);
                 if (project === null) {
-                    console.log('[-] project == null', project);
+                    console.log('[-] project === null', project);
                     util_response_1.apiResponse(res, 400);
                     return;
                 }

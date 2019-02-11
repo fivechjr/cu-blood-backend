@@ -199,9 +199,9 @@ class Routes {
                         id: sessionId
                     }
                 }
-                let session = await Session.count(sessionOptions)
-                if (session != 1) {
-                    console.log('[-] session != 1', session)
+                let session = await Session.findOne(sessionOptions)
+                if (session === 1) {
+                    console.log('[-] session === null', session)
                     apiResponse(res, 400)
                     return
                 }
@@ -213,7 +213,7 @@ class Routes {
                 }
                 let project = await Project.findOne(projectOptions)
                 if (project === null) {
-                    console.log('[-] project == null', project)
+                    console.log('[-] project === null', project)
                     apiResponse(res, 400)
                     return
                 }
