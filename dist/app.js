@@ -23,7 +23,7 @@ class App {
         this.app.use(helmet());
         this.app.use(compression());
         this.app.use(cors({
-            "origin": ["https://cu-blood.herokuapp.com", "http://vm1.pondwarit555.com:8000", "http://next.fives.cloud", "http://localhost:3000", "http://new5558.surge.sh"],
+            "origin": ["https://poom-cublood.herokuapp.com", "https://cu-blood.herokuapp.com", "http://vm1.pondwarit555.com:8000", "http://next.fives.cloud", "http://localhost:3000", "http://new5558.surge.sh"],
             "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
             "preflightContinue": false,
             "optionsSuccessStatus": 204,
