@@ -458,6 +458,7 @@ XXXL | 6
 
 Status | Value | Description
 --- | --- | ---
+No Onboarding | -1 | Account is not linked with LDAP.
 Onboarding | 0 | Account is linked with LDAP and some additional details are not filled.
 Onboarded | 1 | Account is linked with LDAP with additional details filled.
 

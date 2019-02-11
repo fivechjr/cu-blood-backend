@@ -293,6 +293,7 @@ class Routes {
                                 }
                                 let session = await Session.create(model)
                                 session.project = await session.getProject()
+                                session.time = await session.getTime()
                                 apiResponse(res, 200, toSessionEntity(session))
                                 return
                             } catch (e) {

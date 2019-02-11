@@ -291,6 +291,7 @@ class Routes {
                                 }
                                 let session = yield model_session_1.Session.create(model);
                                 session.project = yield session.getProject();
+                                session.time = yield session.getTime();
                                 util_response_1.apiResponse(res, 200, util_response_1.toSessionEntity(session));
                                 return;
                             }
