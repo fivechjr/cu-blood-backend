@@ -201,6 +201,7 @@ class Routes {
                 };
                 let session = yield model_session_1.Session.count(sessionOptions);
                 if (session != 1) {
+                    console.log('[-] session != 1', session);
                     util_response_1.apiResponse(res, 400);
                     return;
                 }
@@ -211,6 +212,7 @@ class Routes {
                 };
                 let project = yield model_project_1.Project.findOne(projectOptions);
                 if (project === null) {
+                    console.log('[-] project == null', project);
                     util_response_1.apiResponse(res, 400);
                     return;
                 }
@@ -227,11 +229,13 @@ class Routes {
                     return;
                 }
                 else {
+                    console.log('[-] timeSlot isBetween');
                     util_response_1.apiResponse(res, 400);
                     return;
                 }
             }
             catch (e) {
+                console.log('[-]', e);
                 util_response_1.apiResponse(res, 500);
                 return;
             }

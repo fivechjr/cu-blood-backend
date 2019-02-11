@@ -201,6 +201,7 @@ class Routes {
                 }
                 let session = await Session.count(sessionOptions)
                 if (session != 1) {
+                    console.log('[-] session != 1', session)
                     apiResponse(res, 400)
                     return
                 }
@@ -212,6 +213,7 @@ class Routes {
                 }
                 let project = await Project.findOne(projectOptions)
                 if (project === null) {
+                    console.log('[-] project == null', project)
                     apiResponse(res, 400)
                     return
                 }
@@ -229,10 +231,12 @@ class Routes {
                     apiResponse(res, 200)
                     return
                 } else {
+                    console.log('[-] timeSlot isBetween')
                     apiResponse(res, 400)
                     return
                 }
             } catch (e) {
+                console.log('[-]', e)
                 apiResponse(res, 500)
                 return
             }
