@@ -15,7 +15,6 @@ export const Session = sequelize.define('session', {
     checkIn: {type: Sequelize.DATE},
     checkOut: {type: Sequelize.DATE},
     status: {type: Sequelize.INTEGER},
-    bloodType: {type: Sequelize.INTEGER},
     type: {
         type: Sequelize.INTEGER,
         allowNull: false,

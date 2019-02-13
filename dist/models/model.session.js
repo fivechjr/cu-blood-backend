@@ -16,7 +16,6 @@ exports.Session = util_database_1.sequelize.define('session', {
     checkIn: { type: sequelize_1.default.DATE },
     checkOut: { type: sequelize_1.default.DATE },
     status: { type: sequelize_1.default.INTEGER },
-    bloodType: { type: sequelize_1.default.INTEGER },
     type: {
         type: sequelize_1.default.INTEGER,
         allowNull: false,
