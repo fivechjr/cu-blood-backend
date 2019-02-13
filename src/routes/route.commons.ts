@@ -150,7 +150,7 @@ class Routes {
             //     group: ['User.bloodType']
             // })
 
-            sequelize.query("SELECT count(b.id) as Count FROM users a LEFT JOIN sessions b on a.id = b.userId GROUP BY a.bloodType", { type: sequelize.QueryTypes.SELECT}).then(d => {
+            sequelize.query("SELECT count(sessions.id) as Count FROM users LEFT JOIN sessions on users.id = sessions.userId GROUP BY users.bloodType", { type: sequelize.QueryTypes.SELECT}).then(d => {
                 console.log(chalk.bgYellow(d))
                 apiResponse(res, 200, d, null, false, req.cacheKey, 60)
             }).catch(e => {
