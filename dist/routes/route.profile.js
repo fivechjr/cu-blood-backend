@@ -290,6 +290,7 @@ class Routes {
                                 };
                                 let check = yield model_session_1.Session.count(options);
                                 if (check > 0) {
+                                    console.log('[-] check > 0', check);
                                     util_response_1.apiResponse(res, 400);
                                     return;
                                 }
@@ -325,6 +326,7 @@ class Routes {
                 }
             }
             catch (e) {
+                console.log('[-]', e);
                 util_response_1.apiResponse(res, 500);
                 return;
             }

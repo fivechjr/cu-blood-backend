@@ -292,6 +292,7 @@ class Routes {
                                 }
                                 let check = await Session.count(options)
                                 if (check > 0) {
+                                    console.log('[-] check > 0', check)
                                     apiResponse(res, 400)
                                     return
                                 }
@@ -322,6 +323,7 @@ class Routes {
                     return
                 }
             } catch (e) {
+                console.log('[-]', e)
                 apiResponse(res, 500)
                 return
             }
