@@ -177,6 +177,7 @@ class Routes {
                 else
                     apiResponse(res, 404)
             } catch (e) {
+                console.log('[-]', e)
                 apiResponse(res, 500, e)
             }
         })

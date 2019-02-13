@@ -178,6 +178,7 @@ class Routes {
                     util_response_1.apiResponse(res, 404);
             }
             catch (e) {
+                console.log('[-]', e);
                 util_response_1.apiResponse(res, 500, e);
             }
         }));
