@@ -141,7 +141,11 @@ class Routes {
             // })
 
             let count = await Session.findAndCountAll({
-                include: [User],
+                include: [{
+                    model: User,
+                    attributes: [],
+                    duplicating: false
+                }],
                 group: ['User.bloodType']
             })
 

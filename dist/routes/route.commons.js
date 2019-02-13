@@ -142,7 +142,11 @@ class Routes {
             //     group: ['User.bloodType']
             // })
             let count = yield model_session_1.Session.findAndCountAll({
-                include: [model_user_1.User],
+                include: [{
+                        model: model_user_1.User,
+                        attributes: [],
+                        duplicating: false
+                    }],
                 group: ['User.bloodType']
             });
             console.log(chalk_1.default.bgYellow(count));
