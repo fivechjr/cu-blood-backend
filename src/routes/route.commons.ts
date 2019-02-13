@@ -106,7 +106,7 @@ class Routes {
             param('year').isInt(),
         ], async (req: PassportRequestEntity, res: Response) => {
 
-            let count = await User.findAll({
+            let count = await Session.findAll({
                 include: [
                     {
                         model: User,

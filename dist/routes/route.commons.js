@@ -13,6 +13,7 @@ const model_project_1 = require("../models/model.project");
 const util_facebook_1 = require("../utils/util.facebook");
 const util_response_1 = require("../utils/util.response");
 const md_is_cached_1 = require("../middlewares/md.is-cached");
+const model_session_1 = require("../models/model.session");
 const check_1 = require("express-validator/check");
 const util_database_1 = require("../utils/util.database");
 const moment = require("moment");
@@ -111,7 +112,7 @@ class Routes {
             // isCached,
             check_1.param('year').isInt(),
         ], (req, res) => __awaiter(this, void 0, void 0, function* () {
-            let count = yield model_user_1.User.findAll({
+            let count = yield model_session_1.Session.findAll({
                 include: [
                     {
                         model: model_user_1.User,
