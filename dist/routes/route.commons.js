@@ -145,7 +145,8 @@ class Routes {
                 include: [{
                         model: model_user_1.User,
                         attributes: [],
-                        duplicating: false
+                        duplicating: false,
+                        required: true
                     }],
                 group: ['User.bloodType']
             });
