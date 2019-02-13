@@ -128,7 +128,7 @@ class Routes {
                     include: [[util_database_1.sequelize.fn("COUNT", util_database_1.sequelize.col("sessions.id")), "sessionCount"]]
                 },
                 include: [{
-                        model: model_session_1.Session, attributes: []
+                        model: model_session_1.Session, as: 'sessions', attributes: []
                     }],
                 group: ['User.bloodType']
             });
