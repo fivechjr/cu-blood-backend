@@ -13,6 +13,7 @@ import { User } from '../models/model.user';
 import { Location } from '../models/model.location';
 import { School } from '../models/model.school';
 import { Time } from '../models/model.time';
+import chalk from 'chalk';
 
 class Routes {
     private router: Router = Router()
@@ -72,89 +73,111 @@ class Routes {
             }
         })
 
-        this.router.get('/insights/sessions/:startDate/:endDate/:status', [
-            isCached,
-            param('startDate').isISO8601(),
-            param('endDate').isISO8601(),
-            param('status').isIn(['all', '0', '1', '2', '3']),
-            isValidated
+        // this.router.get('/insights/sessions/:startDate/:endDate/:status', [
+        //     isCached,
+        //     param('startDate').isISO8601(),
+        //     param('endDate').isISO8601(),
+        //     param('status').isIn(['all', '0', '1', '2', '3']),
+        //     isValidated
+        // ], async (req: PassportRequestEntity, res: Response) => {
+        //     try {
+        //         let status = req.params.status
+        //         let startDate = moment(req.params.startDate).startOf('day').format()
+        //         let endDate = moment(req.params.endDate).endOf('day').format()
+        //         let options: any = {
+        //             where: {
+        //                 checkIn: {
+        //                     [sequelize.Op.between]: [startDate, endDate]
+        //                 }
+        //             }
+        //         }
+        //         if (status !== 'all') {
+        //             options.where.status = Number(status)
+        //         }
+        //         let data = await Session.count(options)
+        //         apiResponse(res, 200, data, null, false, req.cacheKey, 60)
+        //     } catch (e) {
+        //         apiResponse(res, 500, e)
+        //     }
+        // })
+
+        this.router.get('/insights/blood-types/:year', [
+            // isCached,
+            param('year').isInt(),
         ], async (req: PassportRequestEntity, res: Response) => {
-            try {
-                let status = req.params.status
-                let startDate = moment(req.params.startDate).startOf('day').format()
-                let endDate = moment(req.params.endDate).endOf('day').format()
-                let options: any = {
-                    where: {
-                        checkIn: {
-                            [sequelize.Op.between]: [startDate, endDate]
-                        }
+
+            let count = await User.findAll({
+                include: [
+                    {
+                        model: User,
+                        attributes: []
                     }
-                }
-                if (status !== 'all') {
-                    options.where.status = Number(status)
-                }
-                let data = await Session.count(options)
-                apiResponse(res, 200, data, null, false, req.cacheKey, 60)
-            } catch (e) {
-                apiResponse(res, 500, e)
-            }
+                ],
+                group: ['users.bloodType'],
+                attributes: [[sequelize.fn('count', sequelize.col('users.bloodType')) ,'bloodTypeCount']],
+                where: sequelize.where(sequelize.fn('YEAR', sequelize.col('dateField')), req.params.year)
+            })
+
+            console.log(chalk.bgYellow(count))
+
+            apiResponse(res, 200, count, null, false, req.cacheKey, 60)
         })
 
-        this.router.get('/insights/blood-types', [
-            isCached
-        ], async (req: PassportRequestEntity, res: Response) => {
-            let options: any = (a, b) => {
-                return {
-                    where: {
-                        bloodType: {
-                            [sequelize.Op.or]: [a, b]
-                        }
-                    }
-                }
-            }
+        // this.router.get('/insights/blood-types', [
+        //     isCached
+        // ], async (req: PassportRequestEntity, res: Response) => {
+        //     let options: any = (a, b) => {
+        //         return {
+        //             where: {
+        //                 bloodType: {
+        //                     [sequelize.Op.or]: [a, b]
+        //                 }
+        //             }
+        //         }
+        //     }
 
-            let A = await User.count(options(0, 1))
-            let B = await User.count(options(2, 3))
-            let O = await User.count(options(4, 5))
-            let AB = await User.count(options(6, 7))
+        //     let A = await User.count(options(0, 1))
+        //     let B = await User.count(options(2, 3))
+        //     let O = await User.count(options(4, 5))
+        //     let AB = await User.count(options(6, 7))
 
-            let ret = {
-                A, B, O, AB
-            }
+        //     let ret = {
+        //         A, B, O, AB
+        //     }
 
-            apiResponse(res, 200, ret, null, false, req.cacheKey, 60)
-        })
+        //     apiResponse(res, 200, ret, null, false, req.cacheKey, 60)
+        // })
 
-        this.router.get('/insights/sessions/:startDate/:unitOfMeasurement/:duration/:status', [
-            isCached,
-            param('startDate').isISO8601(),
-            param('unitOfMeasurement').isIn(['years', 'months', 'weeks', 'days']),
-            param('duration').isInt(),
-            param('status').isIn(['all', '0', '1', '2', '3']),
-            isValidated
-        ], async (req: PassportRequestEntity, res: Response) => {
-            try {
-                let status = req.params.status
-                let startDate = moment(req.params.startDate).startOf('day').format()
-                let unitOfMeasurement = req.params.unitOfMeasurement
-                let duration = Number(req.params.duration)
-                let endDate = moment(req.params.startDate).add(duration, unitOfMeasurement).endOf('day').format()
-                let options: any = {
-                    where: {
-                        checkIn: {
-                            [sequelize.Op.between]: [startDate, endDate]
-                        }
-                    }
-                }
-                if (status !== 'all') {
-                    options.where.status = Number(status)
-                }
-                let data = await Session.count(options)
-                apiResponse(res, 200, data, null, false, req.cacheKey, 60)
-            } catch (e) {
-                apiResponse(res, 500, e)
-            }
-        })
+        // this.router.get('/insights/sessions/:startDate/:unitOfMeasurement/:duration/:status', [
+        //     isCached,
+        //     param('startDate').isISO8601(),
+        //     param('unitOfMeasurement').isIn(['years', 'months', 'weeks', 'days']),
+        //     param('duration').isInt(),
+        //     param('status').isIn(['all', '0', '1', '2', '3']),
+        //     isValidated
+        // ], async (req: PassportRequestEntity, res: Response) => {
+        //     try {
+        //         let status = req.params.status
+        //         let startDate = moment(req.params.startDate).startOf('day').format()
+        //         let unitOfMeasurement = req.params.unitOfMeasurement
+        //         let duration = Number(req.params.duration)
+        //         let endDate = moment(req.params.startDate).add(duration, unitOfMeasurement).endOf('day').format()
+        //         let options: any = {
+        //             where: {
+        //                 checkIn: {
+        //                     [sequelize.Op.between]: [startDate, endDate]
+        //                 }
+        //             }
+        //         }
+        //         if (status !== 'all') {
+        //             options.where.status = Number(status)
+        //         }
+        //         let data = await Session.count(options)
+        //         apiResponse(res, 200, data, null, false, req.cacheKey, 60)
+        //     } catch (e) {
+        //         apiResponse(res, 500, e)
+        //     }
+        // })
 
         this.router.get('/facebook/posts', [
             isCached
