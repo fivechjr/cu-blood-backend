@@ -150,7 +150,7 @@ class Routes {
             //     group: ['User.bloodType']
             // })
 
-            sequelize.query('SELECT users."bloodType", count(sessions.id) as count FROM users LEFT JOIN sessions on users.id = sessions."userId" GROUP BY users."bloodType" WHERE year(sessions."checkOut") = ?', { replacements: [req.params.year], type: sequelize.QueryTypes.SELECT}).then(d => {
+            sequelize.query('SELECT users."bloodType", count(sessions.id) as count FROM users LEFT JOIN sessions on users.id = sessions."userId" GROUP BY users."bloodType" WHERE EXTRACT(year FROM sessions."checkOut") = ?', { replacements: [req.params.year], type: sequelize.QueryTypes.SELECT}).then(d => {
                 console.log(chalk.bgYellow(d))
                 apiResponse(res, 200, d, null, false, req.cacheKey, 60)
             }).catch(e => {
