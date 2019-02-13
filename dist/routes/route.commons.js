@@ -112,16 +112,25 @@ class Routes {
             // isCached,
             check_1.param('year').isInt(),
         ], (req, res) => __awaiter(this, void 0, void 0, function* () {
-            let count = yield model_session_1.Session.findAll({
-                include: [
-                    {
-                        model: model_user_1.User,
-                        attributes: []
-                    }
-                ],
-                group: ['users.bloodType'],
-                attributes: ['id', [util_database_1.sequelize.fn('count', util_database_1.sequelize.col('users.bloodType')), 'bloodTypeCount']],
-                where: util_database_1.sequelize.where(util_database_1.sequelize.fn('YEAR', util_database_1.sequelize.col('dateField')), req.params.year)
+            // let count = await Session.findAll({
+            //     include: [
+            //         {
+            //             model: User,
+            //             attributes: []
+            //         }
+            //     ],
+            //     group: ['users.bloodType'],
+            //     attributes: ['id', [sequelize.fn('count', sequelize.col('users.bloodType')) ,'bloodTypeCount']],
+            //     where: sequelize.where(sequelize.fn('YEAR', sequelize.col('dateField')), req.params.year)
+            // })
+            let count = yield model_user_1.User.findAll({
+                attributes: {
+                    include: [[util_database_1.sequelize.fn("COUNT", util_database_1.sequelize.col("sessions.id")), "sessionCount"]]
+                },
+                include: [{
+                        model: model_session_1.Session, attributes: []
+                    }],
+                group: ['User.bloodType']
             });
             console.log(chalk_1.default.bgYellow(count));
             util_response_1.apiResponse(res, 200, count, null, false, req.cacheKey, 60);

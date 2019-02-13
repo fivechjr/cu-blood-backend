@@ -106,17 +106,27 @@ class Routes {
             param('year').isInt(),
         ], async (req: PassportRequestEntity, res: Response) => {
 
-            let count = await Session.findAll({
-                include: [
-                    {
-                        model: User,
-                        attributes: []
-                    }
-                ],
-                group: ['users.bloodType'],
-                attributes: ['id', [sequelize.fn('count', sequelize.col('users.bloodType')) ,'bloodTypeCount']],
-                where: sequelize.where(sequelize.fn('YEAR', sequelize.col('dateField')), req.params.year)
-            })
+            // let count = await Session.findAll({
+            //     include: [
+            //         {
+            //             model: User,
+            //             attributes: []
+            //         }
+            //     ],
+            //     group: ['users.bloodType'],
+            //     attributes: ['id', [sequelize.fn('count', sequelize.col('users.bloodType')) ,'bloodTypeCount']],
+            //     where: sequelize.where(sequelize.fn('YEAR', sequelize.col('dateField')), req.params.year)
+            // })
+
+            let count = await User.findAll({
+                attributes: { 
+                    include: [[sequelize.fn("COUNT", sequelize.col("sessions.id")), "sessionCount"]] 
+                },
+                include: [{
+                    model: Session, attributes: []
+                }],
+                group: ['User.bloodType']
+            })            
 
             console.log(chalk.bgYellow(count))
 
