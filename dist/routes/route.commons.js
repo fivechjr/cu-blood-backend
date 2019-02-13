@@ -149,11 +149,12 @@ class Routes {
             //     }],
             //     group: ['User.bloodType']
             // })
-            util_database_1.sequelize.query('SELECT users."bloodType", count(sessions.id) as n FROM users LEFT JOIN sessions on users.id = sessions."userId" GROUP BY users."bloodType"', { type: util_database_1.sequelize.QueryTypes.SELECT }).then(d => {
+            util_database_1.sequelize.query('SELECT users."bloodType", count(sessions.id) as count FROM users LEFT JOIN sessions on users.id = sessions."userId" GROUP BY users."bloodType" WHERE year(sessions."checkOut") = ?', { replacements: [req.params.year], type: util_database_1.sequelize.QueryTypes.SELECT }).then(d => {
                 console.log(chalk_1.default.bgYellow(d));
                 util_response_1.apiResponse(res, 200, d, null, false, req.cacheKey, 60);
             }).catch(e => {
                 console.log(e);
+                util_response_1.apiResponse(res, 400);
             });
         }));
         // this.router.get('/insights/blood-types', [
