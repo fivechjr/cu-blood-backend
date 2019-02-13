@@ -15,7 +15,6 @@ const util_response_1 = require("../utils/util.response");
 const md_is_cached_1 = require("../middlewares/md.is-cached");
 const model_session_1 = require("../models/model.session");
 const check_1 = require("express-validator/check");
-const util_database_1 = require("../utils/util.database");
 const moment = require("moment");
 const model_user_1 = require("../models/model.user");
 const model_location_1 = require("../models/model.location");
@@ -137,8 +136,12 @@ class Routes {
             //     include: [Session],
             //     group: ['User.bloodType']
             // })
-            let count = yield model_session_1.Session.findAll({
-                attributes: ['User.*', 'Session.*', [util_database_1.sequelize.fn('COUNT', 'Session.id'), 'SessionCount']],
+            // let count = await Session.findAll({
+            //     attributes: ['User.*', 'Session.*', [sequelize.fn('COUNT', 'Session.id'), 'SessionCount']],
+            //     include: [User],
+            //     group: ['User.bloodType']
+            // })
+            let count = yield model_session_1.Session.findAndCountAll({
                 include: [model_user_1.User],
                 group: ['User.bloodType']
             });
