@@ -132,9 +132,14 @@ class Routes {
             //     }],
             //     group: ['User.bloodType']
             // })
-            let count = yield model_user_1.User.findAll({
+            // let count = await User.findAll({
+            //     attributes: ['User.*', 'Session.*', [sequelize.fn('COUNT', 'Session.id'), 'SessionCount']],
+            //     include: [Session],
+            //     group: ['User.bloodType']
+            // })
+            let count = yield model_session_1.Session.findAll({
                 attributes: ['User.*', 'Session.*', [util_database_1.sequelize.fn('COUNT', 'Session.id'), 'SessionCount']],
-                include: [model_session_1.Session],
+                include: [model_user_1.User],
                 group: ['User.bloodType']
             });
             console.log(chalk_1.default.bgYellow(count));

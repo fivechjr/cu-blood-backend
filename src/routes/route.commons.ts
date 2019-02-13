@@ -128,9 +128,15 @@ class Routes {
             //     group: ['User.bloodType']
             // })
 
-            let count = await User.findAll({
+            // let count = await User.findAll({
+            //     attributes: ['User.*', 'Session.*', [sequelize.fn('COUNT', 'Session.id'), 'SessionCount']],
+            //     include: [Session],
+            //     group: ['User.bloodType']
+            // })
+
+            let count = await Session.findAll({
                 attributes: ['User.*', 'Session.*', [sequelize.fn('COUNT', 'Session.id'), 'SessionCount']],
-                include: [Session],
+                include: [User],
                 group: ['User.bloodType']
             })
 
