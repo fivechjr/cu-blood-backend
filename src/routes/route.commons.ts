@@ -140,19 +140,24 @@ class Routes {
             //     group: ['User.bloodType']
             // })
 
-            let count = await Session.findAndCountAll({
-                include: [{
-                    model: User,
-                    attributes: [],
-                    duplicating: false,
-                    required: true
-                }],
-                group: ['User.bloodType']
+            // let count = await Session.findAndCountAll({
+            //     include: [{
+            //         model: User,
+            //         attributes: [],
+            //         duplicating: false,
+            //         required: true
+            //     }],
+            //     group: ['User.bloodType']
+            // })
+
+            sequelize.query("SELECT count(b.id) as Count FROM users a LEFT JOIN sessions b on a.id = b.userId GROUP BY a.bloodType", { type: sequelize.QueryTypes.SELECT}).then(d => {
+                console.log(chalk.bgYellow(d))
+                apiResponse(res, 200, d, null, false, req.cacheKey, 60)
+            }).catch(e => {
+                console.log(e)
             })
 
-            console.log(chalk.bgYellow(count))
-
-            apiResponse(res, 200, count, null, false, req.cacheKey, 60)
+            
         })
 
         // this.router.get('/insights/blood-types', [

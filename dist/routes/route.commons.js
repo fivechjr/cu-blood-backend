@@ -13,10 +13,9 @@ const model_project_1 = require("../models/model.project");
 const util_facebook_1 = require("../utils/util.facebook");
 const util_response_1 = require("../utils/util.response");
 const md_is_cached_1 = require("../middlewares/md.is-cached");
-const model_session_1 = require("../models/model.session");
 const check_1 = require("express-validator/check");
+const util_database_1 = require("../utils/util.database");
 const moment = require("moment");
-const model_user_1 = require("../models/model.user");
 const model_location_1 = require("../models/model.location");
 const model_school_1 = require("../models/model.school");
 const model_time_1 = require("../models/model.time");
@@ -141,17 +140,21 @@ class Routes {
             //     include: [User],
             //     group: ['User.bloodType']
             // })
-            let count = yield model_session_1.Session.findAndCountAll({
-                include: [{
-                        model: model_user_1.User,
-                        attributes: [],
-                        duplicating: false,
-                        required: true
-                    }],
-                group: ['User.bloodType']
+            // let count = await Session.findAndCountAll({
+            //     include: [{
+            //         model: User,
+            //         attributes: [],
+            //         duplicating: false,
+            //         required: true
+            //     }],
+            //     group: ['User.bloodType']
+            // })
+            util_database_1.sequelize.query("SELECT count(b.id) as Count FROM users a LEFT JOIN sessions b on a.id = b.userId GROUP BY a.bloodType", { type: util_database_1.sequelize.QueryTypes.SELECT }).then(d => {
+                console.log(chalk_1.default.bgYellow(d));
+                util_response_1.apiResponse(res, 200, d, null, false, req.cacheKey, 60);
+            }).catch(e => {
+                console.log(e);
             });
-            console.log(chalk_1.default.bgYellow(count));
-            util_response_1.apiResponse(res, 200, count, null, false, req.cacheKey, 60);
         }));
         // this.router.get('/insights/blood-types', [
         //     isCached
