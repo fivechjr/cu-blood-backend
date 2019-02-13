@@ -120,7 +120,7 @@ class Routes {
                     }
                 ],
                 group: ['users.bloodType'],
-                attributes: [[util_database_1.sequelize.fn('count', util_database_1.sequelize.col('users.bloodType')), 'bloodTypeCount']],
+                attributes: ['id', [util_database_1.sequelize.fn('count', util_database_1.sequelize.col('users.bloodType')), 'bloodTypeCount']],
                 where: util_database_1.sequelize.where(util_database_1.sequelize.fn('YEAR', util_database_1.sequelize.col('dateField')), req.params.year)
             });
             console.log(chalk_1.default.bgYellow(count));

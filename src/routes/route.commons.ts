@@ -114,7 +114,7 @@ class Routes {
                     }
                 ],
                 group: ['users.bloodType'],
-                attributes: [[sequelize.fn('count', sequelize.col('users.bloodType')) ,'bloodTypeCount']],
+                attributes: ['id', [sequelize.fn('count', sequelize.col('users.bloodType')) ,'bloodTypeCount']],
                 where: sequelize.where(sequelize.fn('YEAR', sequelize.col('dateField')), req.params.year)
             })
 
