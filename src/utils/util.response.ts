@@ -42,7 +42,7 @@ export function normalizeResponseObject (
             message: (message != null) ? message : httpResponseMessage(status),
             success: (status >= 200 && status <= 299) ? true : false,
             cache,
-            result: (status >= 200 && status <= 299) ? (result.length > 0 ? result : null) : null,
+            result: (status >= 200 && status <= 299) ? result : null,
         }
     }
 
