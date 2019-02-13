@@ -9,6 +9,7 @@ import { Project } from '../models/model.project';
 import { User } from '../models/model.user';
 import { Location } from '../models/model.location';
 import moment = require('moment');
+import { Time } from '../models/model.time';
 
 class Routes {
     private router: Router = Router()
@@ -109,7 +110,7 @@ class Routes {
                     where: {
                         id: uuid
                     },
-                    include: [Project, User, Location]
+                    include: [Project, User, Location, Time]
                 }
                 let data = await Session.findOne(options)
                 if (data != null) {

@@ -104,7 +104,7 @@ export function toSessionEntity (s) {
 }
 
 export function toBasicSessionEntity (s) {
-    let { id, timeSlot, checkIn, checkOut, status, createdAt, project, user, location, type } = s
+    let { id, timeSlot, checkIn, checkOut, status, createdAt, project, user, location, type, time } = s
     return {
         id,
         timeSlot,
@@ -125,6 +125,11 @@ export function toBasicSessionEntity (s) {
         },
         location: {
             name: location.nameTH
+        },
+        time: {
+            label: time.label,
+            startTime: time.startTime,
+            endTime: time.endTime
         },
         type
     }

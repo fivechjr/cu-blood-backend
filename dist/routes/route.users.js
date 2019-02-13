@@ -18,6 +18,7 @@ const model_project_1 = require("../models/model.project");
 const model_user_1 = require("../models/model.user");
 const model_location_1 = require("../models/model.location");
 const moment = require("moment");
+const model_time_1 = require("../models/model.time");
 class Routes {
     constructor() {
         this.router = express_1.Router();
@@ -123,7 +124,7 @@ class Routes {
                     where: {
                         id: uuid
                     },
-                    include: [model_project_1.Project, model_user_1.User, model_location_1.Location]
+                    include: [model_project_1.Project, model_user_1.User, model_location_1.Location, model_time_1.Time]
                 };
                 let data = yield model_session_1.Session.findOne(options);
                 if (data != null) {
