@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt'
 import { sequelize } from '../utils/util.database'
 import { School } from './model.school';
 import chalk from 'chalk'
+import { Session } from './model.session';
 
 const User = sequelize.define('user', {
     id: {
@@ -111,5 +112,6 @@ User.prototype.verifyPassword = async function (candidatePassword) {
 }
 
 User.belongsTo(School, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' })
+User.hasMany(Session, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' })
 
 export { User }
