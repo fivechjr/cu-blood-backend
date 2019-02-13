@@ -112,6 +112,5 @@ User.prototype.verifyPassword = async function (candidatePassword) {
 }
 
 User.belongsTo(School, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' })
-User.hasMany(Session, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' })
 
 export { User }

@@ -13,7 +13,6 @@ const v4_1 = require("uuid/v4");
 const bcrypt = require("bcrypt");
 const util_database_1 = require("../utils/util.database");
 const model_school_1 = require("./model.school");
-const model_session_1 = require("./model.session");
 const User = util_database_1.sequelize.define('user', {
     id: {
         type: sequelize_1.default.INTEGER,
@@ -125,5 +124,4 @@ User.prototype.verifyPassword = function (candidatePassword) {
     });
 };
 User.belongsTo(model_school_1.School, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-User.hasMany(model_session_1.Session, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 //# sourceMappingURL=model.user.js.map

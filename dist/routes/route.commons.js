@@ -123,13 +123,18 @@ class Routes {
             //     attributes: ['id', [sequelize.fn('count', sequelize.col('users.bloodType')) ,'bloodTypeCount']],
             //     where: sequelize.where(sequelize.fn('YEAR', sequelize.col('dateField')), req.params.year)
             // })
+            // let count = await User.findAll({
+            //     attributes: { 
+            //         include: [[sequelize.fn("COUNT", sequelize.col("sessions.id")), "sessionCount"]] 
+            //     },
+            //     include: [{
+            //         model: Session, as: 'sessions', attributes: []
+            //     }],
+            //     group: ['User.bloodType']
+            // })
             let count = yield model_user_1.User.findAll({
-                attributes: {
-                    include: [[util_database_1.sequelize.fn("COUNT", util_database_1.sequelize.col("sessions.id")), "sessionCount"]]
-                },
-                include: [{
-                        model: model_session_1.Session, as: 'sessions', attributes: []
-                    }],
+                attributes: ['User.*', 'Session.*', [util_database_1.sequelize.fn('COUNT', 'Session.id'), 'SessionCount']],
+                include: [model_session_1.Session],
                 group: ['User.bloodType']
             });
             console.log(chalk_1.default.bgYellow(count));
