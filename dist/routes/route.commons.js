@@ -19,7 +19,6 @@ const moment = require("moment");
 const model_location_1 = require("../models/model.location");
 const model_school_1 = require("../models/model.school");
 const model_time_1 = require("../models/model.time");
-const chalk_1 = require("chalk");
 class Routes {
     constructor() {
         this.router = express_1.Router();
@@ -107,50 +106,11 @@ class Routes {
         //     }
         // })
         this.router.get('/insights/blood-types/:year', [
-            // isCached,
-            check_1.param('year').isInt(),
+            md_is_cached_1.isCached,
+            check_1.param('year').isInt().not().isEmpty(),
         ], (req, res) => __awaiter(this, void 0, void 0, function* () {
-            // let count = await Session.findAll({
-            //     include: [
-            //         {
-            //             model: User,
-            //             attributes: []
-            //         }
-            //     ],
-            //     group: ['users.bloodType'],
-            //     attributes: ['id', [sequelize.fn('count', sequelize.col('users.bloodType')) ,'bloodTypeCount']],
-            //     where: sequelize.where(sequelize.fn('YEAR', sequelize.col('dateField')), req.params.year)
-            // })
-            // let count = await User.findAll({
-            //     attributes: { 
-            //         include: [[sequelize.fn("COUNT", sequelize.col("sessions.id")), "sessionCount"]] 
-            //     },
-            //     include: [{
-            //         model: Session, as: 'sessions', attributes: []
-            //     }],
-            //     group: ['User.bloodType']
-            // })
-            // let count = await User.findAll({
-            //     attributes: ['User.*', 'Session.*', [sequelize.fn('COUNT', 'Session.id'), 'SessionCount']],
-            //     include: [Session],
-            //     group: ['User.bloodType']
-            // })
-            // let count = await Session.findAll({
-            //     attributes: ['User.*', 'Session.*', [sequelize.fn('COUNT', 'Session.id'), 'SessionCount']],
-            //     include: [User],
-            //     group: ['User.bloodType']
-            // })
-            // let count = await Session.findAndCountAll({
-            //     include: [{
-            //         model: User,
-            //         attributes: [],
-            //         duplicating: false,
-            //         required: true
-            //     }],
-            //     group: ['User.bloodType']
-            // })
-            util_database_1.sequelize.query('SELECT sessions."projectId", users."bloodType", count(sessions.id) as count FROM users LEFT JOIN sessions ON users.id = sessions."userId" GROUP BY users."bloodType" HAVING sessions."projectId" = 1', { replacements: [req.params.year], type: util_database_1.sequelize.QueryTypes.SELECT }).then(d => {
-                console.log(chalk_1.default.bgYellow(d));
+            util_database_1.sequelize.query('SELECT users."bloodType", count(sessions.id) as count FROM users LEFT JOIN sessions ON users.id = sessions."userId" WHERE EXTRACT(year FROM sessions."checkOut") = ? GROUP BY 1, users."bloodType"', { replacements: [req.params.year], type: util_database_1.sequelize.QueryTypes.SELECT }).then(d => {
+                // console.log(chalk.bgYellow(d))
                 util_response_1.apiResponse(res, 200, d, null, false, req.cacheKey, 60);
             }).catch(e => {
                 console.log(e);
