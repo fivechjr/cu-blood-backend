@@ -104,6 +104,7 @@ class Routes {
         this.router.get('/insights/blood-types/:year', [
             isCached,
             param('year').isInt().not().isEmpty(),
+            isValidated
         ], async (req: PassportRequestEntity, res: Response) => {
             sequelize.query('SELECT users."bloodType", count(sessions.id) as count FROM users LEFT JOIN sessions ON users.id = sessions."userId" WHERE EXTRACT(year FROM sessions."checkOut") = ? GROUP BY 1, users."bloodType"', { replacements: [req.params.year], type: sequelize.QueryTypes.SELECT}).then(d => {
                 // console.log(chalk.bgYellow(d))

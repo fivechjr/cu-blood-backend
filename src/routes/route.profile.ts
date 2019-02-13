@@ -307,14 +307,17 @@ class Routes {
                                 return
                             }
                         } else {
+                            console.log('[-] timeSlot isBetween')
                             apiResponse(res, 400)
                             return
                         }
                     } else {
+                        console.log('[-] now isBetween (registrationDate)')
                         apiResponse(res, 400)
                         return
                     }
                 } else {
+                    console.log('[-] project === null || timeData < 0')
                     apiResponse(res, 400)
                     return
                 }

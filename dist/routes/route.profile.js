@@ -307,16 +307,19 @@ class Routes {
                             }
                         }
                         else {
+                            console.log('[-] timeSlot isBetween');
                             util_response_1.apiResponse(res, 400);
                             return;
                         }
                     }
                     else {
+                        console.log('[-] now isBetween (registrationDate)');
                         util_response_1.apiResponse(res, 400);
                         return;
                     }
                 }
                 else {
+                    console.log('[-] project === null || timeData < 0');
                     util_response_1.apiResponse(res, 400);
                     return;
                 }

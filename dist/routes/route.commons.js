@@ -13,6 +13,7 @@ const model_project_1 = require("../models/model.project");
 const util_facebook_1 = require("../utils/util.facebook");
 const util_response_1 = require("../utils/util.response");
 const md_is_cached_1 = require("../middlewares/md.is-cached");
+const util_validation_1 = require("../utils/util.validation");
 const check_1 = require("express-validator/check");
 const util_database_1 = require("../utils/util.database");
 const moment = require("moment");
@@ -108,6 +109,7 @@ class Routes {
         this.router.get('/insights/blood-types/:year', [
             md_is_cached_1.isCached,
             check_1.param('year').isInt().not().isEmpty(),
+            util_validation_1.isValidated
         ], (req, res) => __awaiter(this, void 0, void 0, function* () {
             util_database_1.sequelize.query('SELECT users."bloodType", count(sessions.id) as count FROM users LEFT JOIN sessions ON users.id = sessions."userId" WHERE EXTRACT(year FROM sessions."checkOut") = ? GROUP BY 1, users."bloodType"', { replacements: [req.params.year], type: util_database_1.sequelize.QueryTypes.SELECT }).then(d => {
                 // console.log(chalk.bgYellow(d))
