@@ -26,6 +26,7 @@
     "express-session": "^1.15.6",
     "express-validator": "^5.3.1",
     "fbgraph": "^1.4.4",
+    "git-repo-info": "^2.1.0",
     "helmet": "^3.15.0",
     "jsonwebtoken": "^8.4.0",
     "memory-cache": "^0.2.0",
