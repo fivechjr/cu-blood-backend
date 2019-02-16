@@ -254,6 +254,7 @@ class Routes {
             let projectId = req.body.projectId
             let timeId = req.body.timeId
             let userId = req.user.id
+            let now = moment().utcOffset('420')
             try {
                 let options = {
                     where: {
@@ -268,7 +269,6 @@ class Routes {
                 let data = await Project.findOne(options)
                 let timeData = await Time.count(timeOptions)
                 if (data != null && timeData > 0) {
-                    let now = moment()
                     let locationId = req.body.locationId
                     let timeSlot = moment(req.body.timeSlot).utcOffset('420')
                     let startDate = moment(data.startDate).utcOffset('420')

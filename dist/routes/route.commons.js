@@ -31,7 +31,8 @@ class Routes {
             try {
                 let enumerateDaysBetweenDates = (startDate, endDate) => {
                     let dates = [];
-                    let currDate = moment(startDate).startOf('day');
+                    let now = moment();
+                    let currDate = now.isAfter(moment(startDate).startOf('day')) ? now : moment(startDate).startOf('day');
                     let lastDate = moment(endDate).endOf('day');
                     dates.push(currDate.clone().format());
                     while (currDate.add(1, 'days').diff(lastDate) <= 0) {
