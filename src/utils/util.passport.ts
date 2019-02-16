@@ -8,6 +8,7 @@ import { School } from '../models/model.school'
 const LocalStrategy = passportLocal.Strategy
 
 passport.serializeUser<any, any>((user, done) => {
+    // console.log('[*]', user)
     done(undefined, user.uuid)
 })
 
@@ -21,7 +22,7 @@ passport.deserializeUser(async (id, done) => {
         }
         let user = await User.findOne(options)
         if (user) {
-            done(undefined, toUserEntity(user, true))
+            done(undefined, toUserEntity(user.toJSON(), true))
         } else {
             return done(undefined, false)
         }
@@ -45,7 +46,7 @@ passport.use(new LocalStrategy(async (username, password, done) => {
             try {
                 let verify = await user.verifyPassword(password)
                 if (verify) {
-                    return done(undefined, toUserEntity(user))
+                    return done(undefined, toUserEntity(user.toJSON()))
                 } else {
                     return done(undefined, false, { message: 'Invalid credentials' })
                 }

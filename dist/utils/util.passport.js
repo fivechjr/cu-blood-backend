@@ -16,6 +16,7 @@ const util_database_1 = require("./util.database");
 const model_school_1 = require("../models/model.school");
 const LocalStrategy = passportLocal.Strategy;
 passport.serializeUser((user, done) => {
+    // console.log('[*]', user)
     done(undefined, user.uuid);
 });
 passport.deserializeUser((id, done) => __awaiter(this, void 0, void 0, function* () {
@@ -28,7 +29,7 @@ passport.deserializeUser((id, done) => __awaiter(this, void 0, void 0, function*
         };
         let user = yield model_user_1.User.findOne(options);
         if (user) {
-            done(undefined, util_response_1.toUserEntity(user, true));
+            done(undefined, util_response_1.toUserEntity(user.toJSON(), true));
         }
         else {
             return done(undefined, false);
@@ -54,7 +55,7 @@ passport.use(new LocalStrategy((username, password, done) => __awaiter(this, voi
             try {
                 let verify = yield user.verifyPassword(password);
                 if (verify) {
-                    return done(undefined, util_response_1.toUserEntity(user));
+                    return done(undefined, util_response_1.toUserEntity(user.toJSON()));
                 }
                 else {
                     return done(undefined, false, { message: 'Invalid credentials' });

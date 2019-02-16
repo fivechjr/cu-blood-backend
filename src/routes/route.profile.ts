@@ -30,11 +30,13 @@ class Routes {
                     return
                 }
                 if (!user) {
+                    console.log('[-]', info)
                     apiResponse(res, 401, null, info.message)
                     return
                 }
                 req.logIn(user, (err) => {
                     if (err) {
+                        console.log('[-]', err)
                         apiResponse(res, 401, err)
                         return
                     }
@@ -120,6 +122,7 @@ class Routes {
         this.router.get('/me', [
             isAuthenticated
         ], (req: PassportRequestEntity, res: Response) => {
+            // console.log('[*]', req.user)
             apiResponse(res, 200, toUserEntity(req.user))
         })
 
@@ -202,7 +205,7 @@ class Routes {
                 }
                 let session = await Session.findOne(sessionOptions)
                 if (session === 1) {
-                    console.log('[-] session === null', session)
+                    // console.log('[-] session === null', session)
                     apiResponse(res, 400)
                     return
                 }
@@ -214,7 +217,7 @@ class Routes {
                 }
                 let project = await Project.findOne(projectOptions)
                 if (project === null) {
-                    console.log('[-] project === null', project)
+                    // console.log('[-] project === null', project)
                     apiResponse(res, 400)
                     return
                 }
@@ -232,7 +235,7 @@ class Routes {
                     apiResponse(res, 200)
                     return
                 } else {
-                    console.log('[-] timeSlot isBetween')
+                    // console.log('[-] timeSlot isBetween')
                     apiResponse(res, 400)
                     return
                 }

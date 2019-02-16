@@ -1,4 +1,13 @@
 "use strict";
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const memoryCache = require("memory-cache");
 const util_time_1 = require("./util.time");
@@ -39,36 +48,13 @@ function normalizeResponseObject(status = 200, result, message = null, cache = f
     };
 }
 exports.normalizeResponseObject = normalizeResponseObject;
-function toUserEntity(u, id = false) {
-    if (!id) {
-        let { uuid, firstName, lastName, nickname, gender, bloodType, birthday, username, medicalCondition, studentId, weight, phoneNumber, status, shirtSize, onboarding, nationality, academicYear, isDonated, isEnrolled, school, address } = u;
-        return {
-            uuid,
-            firstName,
-            lastName,
-            nickname,
-            gender,
-            bloodType,
-            birthday,
-            username,
-            medicalCondition,
-            studentId,
-            weight,
-            phoneNumber,
-            status,
-            shirtSize,
-            onboarding,
-            nationality,
-            academicYear,
-            isDonated,
-            isEnrolled,
-            school: { id: school.id, nameTH: school.nameTH, nameEN: school.nameEN },
-            address
-        };
+function toUserEntity(u, withId = false) {
+    let { id, password, createdAt, updatedAt, school } = u, user = __rest(u, ["id", "password", "createdAt", "updatedAt", "school"]);
+    if (!withId) {
+        return Object.assign({}, user, { school: { id: school.id, nameTH: school.nameTH, nameEN: school.nameEN } });
     }
     else {
-        let { id, uuid, firstName, lastName, nickname, gender, bloodType, birthday, username, medicalCondition, studentId, weight, phoneNumber, status, shirtSize, onboarding, nationality, academicYear, isDonated, isEnrolled, school, address } = u;
-        return { id, uuid, firstName, lastName, nickname, gender, bloodType, birthday, username, medicalCondition, studentId, weight, phoneNumber, status, shirtSize, onboarding, nationality, academicYear, isDonated, isEnrolled, school: { id: school.id, nameTH: school.nameTH, nameEN: school.nameEN }, address };
+        return Object.assign({ id }, user, { school: { id: school.id, nameTH: school.nameTH, nameEN: school.nameEN } });
     }
 }
 exports.toUserEntity = toUserEntity;

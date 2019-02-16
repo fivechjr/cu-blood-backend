@@ -38,11 +38,13 @@ class Routes {
                     return;
                 }
                 if (!user) {
+                    console.log('[-]', info);
                     util_response_1.apiResponse(res, 401, null, info.message);
                     return;
                 }
                 req.logIn(user, (err) => {
                     if (err) {
+                        console.log('[-]', err);
                         util_response_1.apiResponse(res, 401, err);
                         return;
                     }
@@ -123,6 +125,7 @@ class Routes {
         this.router.get('/me', [
             md_is_authenticated_1.isAuthenticated
         ], (req, res) => {
+            // console.log('[*]', req.user)
             util_response_1.apiResponse(res, 200, util_response_1.toUserEntity(req.user));
         });
         this.router.put('/me/update', [
@@ -202,7 +205,7 @@ class Routes {
                 };
                 let session = yield model_session_1.Session.findOne(sessionOptions);
                 if (session === 1) {
-                    console.log('[-] session === null', session);
+                    // console.log('[-] session === null', session)
                     util_response_1.apiResponse(res, 400);
                     return;
                 }
@@ -213,7 +216,7 @@ class Routes {
                 };
                 let project = yield model_project_1.Project.findOne(projectOptions);
                 if (project === null) {
-                    console.log('[-] project === null', project);
+                    // console.log('[-] project === null', project)
                     util_response_1.apiResponse(res, 400);
                     return;
                 }
@@ -230,7 +233,7 @@ class Routes {
                     return;
                 }
                 else {
-                    console.log('[-] timeSlot isBetween');
+                    // console.log('[-] timeSlot isBetween')
                     util_response_1.apiResponse(res, 400);
                     return;
                 }

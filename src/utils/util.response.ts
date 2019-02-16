@@ -46,35 +46,27 @@ export function normalizeResponseObject (
         }
     }
 
-export function toUserEntity (u, id = false) {
-    if (!id) {
-        let { uuid, firstName, lastName, nickname, gender, bloodType, birthday, username, medicalCondition, studentId, weight, phoneNumber, status, shirtSize, onboarding, nationality, academicYear, isDonated, isEnrolled, school, address } = u
+export function toUserEntity (u, withId = false) {
+    let {
+        id,
+        password,
+        createdAt,
+        updatedAt,
+        school,
+        ...user
+    } = u
+
+    if (!withId) {
         return {
-            uuid,
-            firstName,
-            lastName,
-            nickname,
-            gender,
-            bloodType,
-            birthday,
-            username,
-            medicalCondition,
-            studentId,
-            weight,
-            phoneNumber,
-            status,
-            shirtSize,
-            onboarding,
-            nationality,
-            academicYear,
-            isDonated,
-            isEnrolled,
-            school: { id: school.id, nameTH: school.nameTH, nameEN: school.nameEN },
-            address
+            ...user,
+            school: { id: school.id, nameTH: school.nameTH, nameEN: school.nameEN }
         }
     } else {
-        let { id, uuid, firstName, lastName, nickname, gender, bloodType, birthday, username, medicalCondition, studentId, weight, phoneNumber, status, shirtSize, onboarding, nationality, academicYear, isDonated, isEnrolled, school, address } = u
-        return { id, uuid, firstName, lastName, nickname, gender, bloodType, birthday, username, medicalCondition, studentId, weight, phoneNumber, status, shirtSize, onboarding, nationality, academicYear, isDonated, isEnrolled, school: { id: school.id, nameTH: school.nameTH, nameEN: school.nameEN }, address }
+        return {
+            id,
+            ...user,
+            school: { id: school.id, nameTH: school.nameTH, nameEN: school.nameEN }
+        }
     }
 }
 
