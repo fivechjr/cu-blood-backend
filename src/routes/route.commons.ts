@@ -17,6 +17,7 @@ import { isInternalRequest } from '../middlewares/md.is-internal-request'
 import * as flatten from 'flat'
 import { parse } from 'json2csv'
 import * as basicAuth from 'express-basic-auth'
+import { utcOffset } from '../utils/util.time';
 
 class Routes {
     private router: Router = Router()
@@ -153,6 +154,10 @@ class Routes {
                 z.user.isEnrolled = getBooleanString(z.user.isEnrolled)
                 z.location = getLocationName(z.location)
                 z.time = getTime(z.time)
+                z.checkIn = utcOffset(z.checkIn)
+                z.checkOut = utcOffset(z.checkOut)
+                z.createdAt = utcOffset(z.createdAt)
+                z.updatedAt = utcOffset(z.updatedAt)
             });
 
             let result = d.map(z => flatten(z))

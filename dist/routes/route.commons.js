@@ -25,6 +25,7 @@ const model_time_1 = require("../models/model.time");
 const flatten = require("flat");
 const json2csv_1 = require("json2csv");
 const basicAuth = require("express-basic-auth");
+const util_time_1 = require("../utils/util.time");
 class Routes {
     constructor() {
         this.router = express_1.Router();
@@ -153,6 +154,10 @@ class Routes {
                 z.user.isEnrolled = getBooleanString(z.user.isEnrolled);
                 z.location = getLocationName(z.location);
                 z.time = getTime(z.time);
+                z.checkIn = util_time_1.utcOffset(z.checkIn);
+                z.checkOut = util_time_1.utcOffset(z.checkOut);
+                z.createdAt = util_time_1.utcOffset(z.createdAt);
+                z.updatedAt = util_time_1.utcOffset(z.updatedAt);
             });
             let result = d.map(z => flatten(z));
             const csv = json2csv_1.parse(result);
