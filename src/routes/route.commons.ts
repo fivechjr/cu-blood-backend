@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express'
 import { Project } from '../models/model.project'
 import { getFacebookPosts, getFacebookAlbums, getFacebookPhotos } from '../utils/util.facebook'
-import { apiResponse } from '../utils/util.response'
+import { apiResponse, toUserEntity, getBloodType } from '../utils/util.response'
 import { isCached } from '../middlewares/md.is-cached'
 import { PassportRequestEntity } from 'spec'
 import { Session } from '../models/model.session'
@@ -9,11 +9,14 @@ import { isValidated } from '../utils/util.validation'
 import { param } from 'express-validator/check'
 import { sequelize } from '../utils/util.database'
 import * as moment from 'moment'
-import { User } from '../models/model.user';
-import { Location } from '../models/model.location';
-import { School } from '../models/model.school';
-import { Time } from '../models/model.time';
-import chalk from 'chalk';
+import { User } from '../models/model.user'
+import { Location } from '../models/model.location'
+import { School } from '../models/model.school'
+import { Time } from '../models/model.time'
+import { isInternalRequest } from '../middlewares/md.is-internal-request'
+import * as flatten from 'flat'
+import { parse } from 'json2csv'
+import * as basicAuth from 'express-basic-auth'
 
 class Routes {
     private router: Router = Router()
@@ -74,33 +77,94 @@ class Routes {
             }
         })
 
-        // this.router.get('/insights/sessions/:startDate/:endDate/:status', [
-        //     isCached,
-        //     param('startDate').isISO8601(),
-        //     param('endDate').isISO8601(),
-        //     param('status').isIn(['all', '0', '1', '2', '3']),
-        //     isValidated
-        // ], async (req: PassportRequestEntity, res: Response) => {
-        //     try {
-        //         let status = req.params.status
-        //         let startDate = moment(req.params.startDate).startOf('day').format()
-        //         let endDate = moment(req.params.endDate).endOf('day').format()
-        //         let options: any = {
-        //             where: {
-        //                 checkIn: {
-        //                     [sequelize.Op.between]: [startDate, endDate]
-        //                 }
-        //             }
-        //         }
-        //         if (status !== 'all') {
-        //             options.where.status = Number(status)
-        //         }
-        //         let data = await Session.count(options)
-        //         apiResponse(res, 200, data, null, false, req.cacheKey, 60)
-        //     } catch (e) {
-        //         apiResponse(res, 500, e)
-        //     }
-        // })
+        this.router.get('/insights/reports/:projectId', [
+            // isInternalRequest,
+            basicAuth({
+                users: { 'root' : process.env.API_KEY },
+                challenge: true,
+                realm: 'Insights',
+            }),
+            param('projectId').isInt().not().isEmpty(),
+            isValidated
+        ], async (req: PassportRequestEntity, res: Response) => {
+            // console.log('[*]', req.params.projectId)
+            // apiResponse(res, 200)
+            let data = await Session.findAll({
+                where: {
+                    projectId: req.params.projectId
+                },
+                include: [{
+                    model: User,
+                    include: [School]
+                }, Location, Time]
+            })
+
+            let d = data.map(d => d.toJSON())
+            // console.log('[*]', d)
+
+            const getGender = (g) => {
+                return {
+                    0: 'M',
+                    1: 'F'
+                }[g]
+            }
+
+            const getBooleanString = (b) => {
+                return {
+                    0: 'NO',
+                    1: 'YES'
+                }[b]
+            }
+
+            const getTime = (t) => {
+                return `${t.startTime} - ${t.endTime} (${t.label})`
+            }
+
+            const getLocationName = (l) => {
+                return l.nameTH
+            }
+
+            const getSchoolName = (s) => {
+                return s.nameTH
+            }
+
+            const getNationality = (n) => {
+                return {
+                    0: 'Thai',
+                    1: 'Foreigner'
+                }[n]
+            }
+
+            d.forEach(z => {
+                // delete z.id
+                delete z.projectId
+                delete z.locationId
+                delete z.userId
+                delete z.timeId
+                delete z.user.uuid
+                delete z.user.schoolId
+                delete z.user.onboarding
+                z.user = toUserEntity(z.user, false)
+                z.user.nationality = getNationality(z.user.nationality)
+                z.user.bloodType = getBloodType(z.user.bloodType)
+                z.user.school = getSchoolName(z.user.school)
+                z.user.gender = getGender(z.user.gender)
+                z.user.isDonated = getBooleanString(z.user.isDonated)
+                z.user.isEnrolled = getBooleanString(z.user.isEnrolled)
+                z.location = getLocationName(z.location)
+                z.time = getTime(z.time)
+            });
+
+            let result = d.map(z => flatten(z))
+            const csv = parse(result)
+
+            // console.log(csv)
+            // apiResponse(res, 200, result)
+            res.attachment(`${Date.now()} - ${req.params.projectId}.csv`)
+            res.type('txt/csv')
+            res.send(csv)
+            res.end()
+        })
 
         this.router.get('/insights/blood-types/:year', [
             isCached,

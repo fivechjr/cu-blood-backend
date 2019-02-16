@@ -13,13 +13,18 @@ const model_project_1 = require("../models/model.project");
 const util_facebook_1 = require("../utils/util.facebook");
 const util_response_1 = require("../utils/util.response");
 const md_is_cached_1 = require("../middlewares/md.is-cached");
+const model_session_1 = require("../models/model.session");
 const util_validation_1 = require("../utils/util.validation");
 const check_1 = require("express-validator/check");
 const util_database_1 = require("../utils/util.database");
 const moment = require("moment");
+const model_user_1 = require("../models/model.user");
 const model_location_1 = require("../models/model.location");
 const model_school_1 = require("../models/model.school");
 const model_time_1 = require("../models/model.time");
+const flatten = require("flat");
+const json2csv_1 = require("json2csv");
+const basicAuth = require("express-basic-auth");
 class Routes {
     constructor() {
         this.router = express_1.Router();
@@ -80,33 +85,84 @@ class Routes {
                 util_response_1.apiResponse(res, 500);
             }
         }));
-        // this.router.get('/insights/sessions/:startDate/:endDate/:status', [
-        //     isCached,
-        //     param('startDate').isISO8601(),
-        //     param('endDate').isISO8601(),
-        //     param('status').isIn(['all', '0', '1', '2', '3']),
-        //     isValidated
-        // ], async (req: PassportRequestEntity, res: Response) => {
-        //     try {
-        //         let status = req.params.status
-        //         let startDate = moment(req.params.startDate).startOf('day').format()
-        //         let endDate = moment(req.params.endDate).endOf('day').format()
-        //         let options: any = {
-        //             where: {
-        //                 checkIn: {
-        //                     [sequelize.Op.between]: [startDate, endDate]
-        //                 }
-        //             }
-        //         }
-        //         if (status !== 'all') {
-        //             options.where.status = Number(status)
-        //         }
-        //         let data = await Session.count(options)
-        //         apiResponse(res, 200, data, null, false, req.cacheKey, 60)
-        //     } catch (e) {
-        //         apiResponse(res, 500, e)
-        //     }
-        // })
+        this.router.get('/insights/reports/:projectId', [
+            // isInternalRequest,
+            basicAuth({
+                users: { 'root': process.env.API_KEY },
+                challenge: true,
+                realm: 'Insights',
+            }),
+            check_1.param('projectId').isInt().not().isEmpty(),
+            util_validation_1.isValidated
+        ], (req, res) => __awaiter(this, void 0, void 0, function* () {
+            // console.log('[*]', req.params.projectId)
+            // apiResponse(res, 200)
+            let data = yield model_session_1.Session.findAll({
+                where: {
+                    projectId: req.params.projectId
+                },
+                include: [{
+                        model: model_user_1.User,
+                        include: [model_school_1.School]
+                    }, model_location_1.Location, model_time_1.Time]
+            });
+            let d = data.map(d => d.toJSON());
+            // console.log('[*]', d)
+            const getGender = (g) => {
+                return {
+                    0: 'M',
+                    1: 'F'
+                }[g];
+            };
+            const getBooleanString = (b) => {
+                return {
+                    0: 'NO',
+                    1: 'YES'
+                }[b];
+            };
+            const getTime = (t) => {
+                return `${t.startTime} - ${t.endTime} (${t.label})`;
+            };
+            const getLocationName = (l) => {
+                return l.nameTH;
+            };
+            const getSchoolName = (s) => {
+                return s.nameTH;
+            };
+            const getNationality = (n) => {
+                return {
+                    0: 'Thai',
+                    1: 'Foreigner'
+                }[n];
+            };
+            d.forEach(z => {
+                // delete z.id
+                delete z.projectId;
+                delete z.locationId;
+                delete z.userId;
+                delete z.timeId;
+                delete z.user.uuid;
+                delete z.user.schoolId;
+                delete z.user.onboarding;
+                z.user = util_response_1.toUserEntity(z.user, false);
+                z.user.nationality = getNationality(z.user.nationality);
+                z.user.bloodType = util_response_1.getBloodType(z.user.bloodType);
+                z.user.school = getSchoolName(z.user.school);
+                z.user.gender = getGender(z.user.gender);
+                z.user.isDonated = getBooleanString(z.user.isDonated);
+                z.user.isEnrolled = getBooleanString(z.user.isEnrolled);
+                z.location = getLocationName(z.location);
+                z.time = getTime(z.time);
+            });
+            let result = d.map(z => flatten(z));
+            const csv = json2csv_1.parse(result);
+            // console.log(csv)
+            // apiResponse(res, 200, result)
+            res.attachment(`${Date.now()} - ${req.params.projectId}.csv`);
+            res.type('txt/csv');
+            res.send(csv);
+            res.end();
+        }));
         this.router.get('/insights/blood-types/:year', [
             md_is_cached_1.isCached,
             check_1.param('year').isInt().not().isEmpty(),

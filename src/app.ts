@@ -57,7 +57,7 @@ class App {
             cookie: {
                 // secure: true,
                 // secureProxy: true,
-                domain: '.fives.cloud',
+                // domain: '.fives.cloud',
                 // domain: 'localhost',
                 maxAge: 3 * 60 * 60 * 1000,
                 // httpOnly: true,

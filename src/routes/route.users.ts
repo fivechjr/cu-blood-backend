@@ -3,7 +3,7 @@ import { apiResponse, toBasicSessionEntity } from '../utils/util.response'
 import { isInternalRequest } from '../middlewares/md.is-internal-request';
 import { Session } from '../models/model.session';
 import { PassportRequestEntity } from 'spec';
-import { body } from 'express-validator/check';
+import { body, param } from 'express-validator/check';
 import { isValidated } from '../utils/util.validation';
 import { Project } from '../models/model.project';
 import { User } from '../models/model.user';

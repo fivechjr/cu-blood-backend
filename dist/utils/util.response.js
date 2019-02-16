@@ -83,6 +83,25 @@ function toSessionEntity(s) {
     };
 }
 exports.toSessionEntity = toSessionEntity;
+function getBloodType(b) {
+    let suffix = (z) => {
+        return {
+            0: '+',
+            1: '-',
+            2: 'Unknown'
+        }[z % 3];
+    };
+    let prefix = (z) => {
+        return {
+            0: 'A',
+            3: 'B',
+            6: 'O',
+            9: 'AB'
+        }[z - (z % 3)];
+    };
+    return `${prefix(b)} [${suffix(b)}]`;
+}
+exports.getBloodType = getBloodType;
 function toBasicSessionEntity(s) {
     let { id, timeSlot, checkIn, checkOut, status, createdAt, project, user, location, type, time } = s;
     return {
