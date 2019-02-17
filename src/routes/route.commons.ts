@@ -171,7 +171,7 @@ class Routes {
 
             // console.log(csv)
             // apiResponse(res, 200, result)
-            res.attachment(`${Date.now()} - ${req.params.projectId} : ${project.name} (${utcOffset(project.startDate)} - ${utcOffset(project.endDate)}).csv`)
+            res.attachment(`${Date.now()} - ${req.params.projectId} - ${project.name} (${utcOffset(project.startDate)} - ${utcOffset(project.endDate)}).csv`)
             res.type('txt/csv')
             res.send(csv)
             res.end()
