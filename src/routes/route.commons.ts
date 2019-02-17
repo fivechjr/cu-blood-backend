@@ -90,7 +90,7 @@ class Routes {
         ], async (req: PassportRequestEntity, res: Response) => {
             // console.log('[*]', req.params.projectId)
             // apiResponse(res, 200)
-            let project = await Session.findOne({
+            let project = await Project.findOne({
                 where: {
                     id: req.params.projectId
                 }

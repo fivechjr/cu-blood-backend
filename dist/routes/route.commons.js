@@ -98,7 +98,7 @@ class Routes {
         ], (req, res) => __awaiter(this, void 0, void 0, function* () {
             // console.log('[*]', req.params.projectId)
             // apiResponse(res, 200)
-            let project = yield model_session_1.Session.findOne({
+            let project = yield model_project_1.Project.findOne({
                 where: {
                     id: req.params.projectId
                 }
