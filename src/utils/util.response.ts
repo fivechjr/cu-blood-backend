@@ -100,7 +100,7 @@ export function getBloodType (b) {
         return {
             0: '+',
             1: '-',
-            2: 'Unknown'
+            2: '?'
         }[z % 3]
     }
     let prefix = (z) => {

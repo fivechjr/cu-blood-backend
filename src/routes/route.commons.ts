@@ -90,6 +90,12 @@ class Routes {
         ], async (req: PassportRequestEntity, res: Response) => {
             // console.log('[*]', req.params.projectId)
             // apiResponse(res, 200)
+            let project = await Session.findOne({
+                where: {
+                    id: req.params.projectId
+                }
+            })
+
             let data = await Session.findAll({
                 where: {
                     projectId: req.params.projectId
@@ -165,7 +171,7 @@ class Routes {
 
             // console.log(csv)
             // apiResponse(res, 200, result)
-            res.attachment(`${Date.now()} - ${req.params.projectId}.csv`)
+            res.attachment(`${Date.now()} - ${req.params.projectId} : ${project.name} (${utcOffset(project.startDate)} - ${utcOffset(project.endDate)}).csv`)
             res.type('txt/csv')
             res.send(csv)
             res.end()
