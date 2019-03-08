@@ -5,7 +5,7 @@ export interface PassportRequestEntity extends Request {
     logIn: any,
     logout: any,
     isAuthenticated: any,
-    cacheKey: String,
+    cacheKey: string,
     session: any
 }
 

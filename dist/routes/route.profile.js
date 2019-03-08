@@ -22,6 +22,7 @@ require("../utils/util.passport");
 const moment = require("moment");
 const model_time_1 = require("../models/model.time");
 const chalk_1 = require("chalk");
+const util_passcode_1 = require("../utils/util.passcode");
 class Routes {
     constructor() {
         this.router = express_1.Router();
@@ -276,7 +277,8 @@ class Routes {
                     let endDate = moment(data.endDate).utcOffset('420');
                     let registrationStartDate = moment(data.registrationStartDate).utcOffset('420');
                     let registrationEndDate = moment(data.registrationEndDate).utcOffset('420');
-                    if (md_is_internal_request_1.verifyInternalRequest(req) || (now.isBetween(registrationStartDate, registrationEndDate, 'days', '[]'))) {
+                    let isRegisteringInRegistrationSlot = now.isBetween(registrationStartDate, registrationEndDate, 'days', '[]');
+                    if (isRegisteringInRegistrationSlot || md_is_internal_request_1.verifyInternalRequest(req) || util_passcode_1.verifyPasscode(data.passcode, req, res)) {
                         if (timeSlot.isBetween(startDate, endDate, 'days', '[]')) {
                             try {
                                 let options = {

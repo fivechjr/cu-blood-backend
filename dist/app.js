@@ -9,6 +9,7 @@ const passport = require("passport");
 const session = require("express-session");
 const connectRedis = require("connect-redis");
 const cors = require("cors");
+const config_1 = require("./config");
 // import * as rateLimit from 'express-rate-limit'
 const RedisStore = connectRedis(session);
 dotenv.config();
@@ -23,7 +24,7 @@ class App {
         this.app.use(helmet());
         this.app.use(compression());
         this.app.use(cors({
-            "origin": ["https://vm1.pondwarit555.com", "https://poom-cublood.herokuapp.com", "https://cu-blood.herokuapp.com", "http://vm1.pondwarit555.com:8000", "http://next.fives.cloud", "http://localhost:3000", "http://new5558.surge.sh"],
+            "origin": [...config_1.config.enableCORS],
             "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
             "preflightContinue": false,
             "optionsSuccessStatus": 204,
@@ -52,7 +53,7 @@ class App {
             cookie: {
                 // secure: true,
                 // secureProxy: true,
-                domain: '.fives.cloud',
+                domain: '.' + process.env.API_URL,
                 // domain: 'localhost',
                 maxAge: 3 * 60 * 60 * 1000,
             }

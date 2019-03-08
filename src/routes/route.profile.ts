@@ -13,8 +13,8 @@ import { verifyInternalRequest } from '../middlewares/md.is-internal-request'
 import '../utils/util.passport'
 import moment = require('moment')
 import { Time } from '../models/model.time'
-import { sequelize } from '../utils/util.database';
 import chalk from 'chalk';
+import { verifyPasscode } from '../utils/util.passcode';
 
 class Routes {
     private router: Router = Router()
@@ -278,7 +278,8 @@ class Routes {
                     let endDate = moment(data.endDate).utcOffset('420')
                     let registrationStartDate = moment(data.registrationStartDate).utcOffset('420')
                     let registrationEndDate = moment(data.registrationEndDate).utcOffset('420')
-                    if (verifyInternalRequest(req) || (now.isBetween(registrationStartDate, registrationEndDate, 'days', '[]'))) {
+                    let isRegisteringInRegistrationSlot = now.isBetween(registrationStartDate, registrationEndDate, 'days', '[]')
+                    if (isRegisteringInRegistrationSlot || verifyInternalRequest(req) || verifyPasscode(data.passcode, req, res)) {
                         if (timeSlot.isBetween(startDate, endDate, 'days', '[]')) {
                             try {
                                 let options = {

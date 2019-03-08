@@ -6,7 +6,7 @@ import { isCached } from '../middlewares/md.is-cached'
 import { PassportRequestEntity } from 'spec'
 import { Session } from '../models/model.session'
 import { isValidated } from '../utils/util.validation'
-import { param } from 'express-validator/check'
+import { param, body } from 'express-validator/check'
 import { sequelize } from '../utils/util.database'
 import * as moment from 'moment'
 import { User } from '../models/model.user'
@@ -37,7 +37,6 @@ class Routes {
                     }
                     return dates;
                 }
-
                 let projectOptions = {
                     attributes: ['id', 'name', 'registrationStartDate', 'registrationEndDate', 'startDate', 'endDate'],
                     order: [['id', 'DESC']],
@@ -77,6 +76,17 @@ class Routes {
                 apiResponse(res, 500)
             }
         })
+
+        // this.router.post('/passcode', [
+        //     body('passcode').not().isEmpty(),
+        //     isValidated
+        // ], async (req: PassportRequestEntity, res: Response) => {
+        //     let projectOptions = {
+        //         attributes: ['id', 'passcode'],
+        //         order: [['id', 'DESC']],
+        //         limit: 1
+        //     }
+        // })
 
         this.router.get('/insights/reports/:projectId', [
             // isInternalRequest,

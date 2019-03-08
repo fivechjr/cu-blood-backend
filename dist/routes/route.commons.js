@@ -86,6 +86,16 @@ class Routes {
                 util_response_1.apiResponse(res, 500);
             }
         }));
+        // this.router.post('/passcode', [
+        //     body('passcode').not().isEmpty(),
+        //     isValidated
+        // ], async (req: PassportRequestEntity, res: Response) => {
+        //     let projectOptions = {
+        //         attributes: ['id', 'passcode'],
+        //         order: [['id', 'DESC']],
+        //         limit: 1
+        //     }
+        // })
         this.router.get('/insights/reports/:projectId', [
             // isInternalRequest,
             basicAuth({
