@@ -30,15 +30,18 @@ class Routes {
                     let dates = []
                     let now = moment().startOf('day')
                     let currDate = now.isAfter(moment(startDate).startOf('day')) ? now : moment(startDate).startOf('day')
+                    if (now.isAfter(moment(endDate).endOf('day'))) {
+                        return dates
+                    }
                     let lastDate = moment(endDate).endOf('day')
                     dates.push(currDate.clone().format())
                     while(currDate.add(1, 'days').diff(lastDate) <= 0) {
                         dates.push(currDate.clone().format())
                     }
-                    return dates;
+                    return dates
                 }
                 let projectOptions = {
-                    attributes: ['id', 'name', 'registrationStartDate', 'registrationEndDate', 'startDate', 'endDate'],
+                    attributes: ['id', 'name', 'registrationStartDate', 'registrationEndDate', 'revisionEndDate', 'startDate', 'endDate'],
                     order: [['id', 'DESC']],
                     limit: 1
                 }
@@ -65,6 +68,7 @@ class Routes {
                 result.endDate = moment(result.endDate).utcOffset(420).format()
                 result.registrationStartDate = moment(result.registrationStartDate).utcOffset(420).format()
                 result.registrationEndDate = moment(result.registrationEndDate).utcOffset(420).format()
+                result.revisionEndDate = moment(result.revisionEndDate).utcOffset(420).format()
                 result.timeSlots = enumerateDaysBetweenDates(result.startDate, result.endDate)
                 result.times = times
                 if (data.length > 0)

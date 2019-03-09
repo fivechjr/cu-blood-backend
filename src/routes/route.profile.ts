@@ -224,21 +224,23 @@ class Routes {
 
                 let startDate = moment(project.startDate).utcOffset('420')
                 let endDate = moment(project.endDate).utcOffset('420')
+                let revisionEndDate = moment(project.revisionEndDate).utcOffset('420')
+                let now = moment().utcOffset('420')
 
-                if (timeSlot.isBetween(startDate, endDate, 'days', '[]')) {
-                    let options = {
-                        where: {
-                            id: sessionId
+                if (verifyPasscode(project.passcode, req, res) || !now.isAfter(moment(revisionEndDate))) {
+                    if (timeSlot.isBetween(startDate, endDate, 'days', '[]')) {
+                        let options = {
+                            where: {
+                                id: sessionId
+                            }
                         }
+                        let data = await Session.update({ locationId, timeSlot, timeId }, options)
+                        apiResponse(res, 200)
+                        return
                     }
-                    let data = await Session.update({ locationId, timeSlot, timeId }, options)
-                    apiResponse(res, 200)
-                    return
-                } else {
-                    // console.log('[-] timeSlot isBetween')
-                    apiResponse(res, 400)
-                    return
                 }
+                apiResponse(res, 400)
+                return
             } catch (e) {
                 console.log('[-]', e)
                 apiResponse(res, 500)

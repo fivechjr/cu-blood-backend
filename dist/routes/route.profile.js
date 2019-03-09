@@ -223,21 +223,22 @@ class Routes {
                 }
                 let startDate = moment(project.startDate).utcOffset('420');
                 let endDate = moment(project.endDate).utcOffset('420');
-                if (timeSlot.isBetween(startDate, endDate, 'days', '[]')) {
-                    let options = {
-                        where: {
-                            id: sessionId
-                        }
-                    };
-                    let data = yield model_session_1.Session.update({ locationId, timeSlot, timeId }, options);
-                    util_response_1.apiResponse(res, 200);
-                    return;
+                let revisionEndDate = moment(project.revisionEndDate).utcOffset('420');
+                let now = moment().utcOffset('420');
+                if (util_passcode_1.verifyPasscode(project.passcode, req, res) || !now.isAfter(moment(revisionEndDate))) {
+                    if (timeSlot.isBetween(startDate, endDate, 'days', '[]')) {
+                        let options = {
+                            where: {
+                                id: sessionId
+                            }
+                        };
+                        let data = yield model_session_1.Session.update({ locationId, timeSlot, timeId }, options);
+                        util_response_1.apiResponse(res, 200);
+                        return;
+                    }
                 }
-                else {
-                    // console.log('[-] timeSlot isBetween')
-                    util_response_1.apiResponse(res, 400);
-                    return;
-                }
+                util_response_1.apiResponse(res, 400);
+                return;
             }
             catch (e) {
                 console.log('[-]', e);
