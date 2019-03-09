@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "go": "ts-node ./src/server.ts",
-    "start": "nodemon ./dist/server.js",
+    "start:dev": "nodemon ./dist/server.js",
+    "start": "node ./dist/server.js",
     "prod": "npm run build && npm run start"
   },
   "dependencies": {
