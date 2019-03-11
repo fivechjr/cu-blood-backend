@@ -222,12 +222,17 @@ class Routes {
                     return
                 }
 
+                console.log('[*] project', project)
+
                 let startDate = moment(project.startDate).utcOffset('420')
                 let endDate = moment(project.endDate).utcOffset('420')
                 let revisionEndDate = moment(project.revisionEndDate).utcOffset('420')
                 let now = moment().utcOffset('420')
                 let isAfterRevisionEndDate = now.isAfter(moment(revisionEndDate))
                 let isPasscodeValid = verifyPasscode(project.passcode, req, res)
+
+                console.log('[*] isAfterRevisionEndDate', isAfterRevisionEndDate)
+                console.log('[*] isPasscodeValid', isPasscodeValid)
 
                 if (isPasscodeValid && !isAfterRevisionEndDate) {
                     if (timeSlot.isBetween(startDate, endDate, 'days', '[]')) {
@@ -244,8 +249,6 @@ class Routes {
                         return
                     }
                 } else {
-                    console.log('[*] isAfterRevisionEndDate', isAfterRevisionEndDate)
-                    console.log('[*] isPasscodeValid', isPasscodeValid)
                     apiResponse(res, 400)
                     return
                 }
