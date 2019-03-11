@@ -50,7 +50,8 @@ class App {
         this.app.use(session({
             proxy: true,
             store: new RedisStore({
-                host: 'localhost'
+                host: process.env.RD_HOST,
+                port: process.env.RD_PORT
             }),
             secret: process.env.API_SECRET,
             saveUninitialized: false, // false
@@ -68,7 +69,10 @@ class App {
         this.app.use(passport.session())
         this.app.use(process.env.API_ROOT, routes)
         this.app.all('*', (req: express.Request, res: express.Response) => {
-            apiResponse(res, 501)
+            apiResponse(res, 501, {
+                originalUrl: req.originalUrl,
+                root: process.env.API_ROOT
+            })
         })
     }
 }
