@@ -7,7 +7,9 @@ exports.Project = util_database_1.sequelize.define('project', {
     registrationStartDate: { type: sequelize_1.default.DATE },
     registrationEndDate: { type: sequelize_1.default.DATE },
     startDate: { type: sequelize_1.default.DATE },
-    endDate: { type: sequelize_1.default.DATE }
+    endDate: { type: sequelize_1.default.DATE },
+    revisionEndDate: { type: sequelize_1.default.DATE },
+    passcode: { type: sequelize_1.default.STRING }
 }, {
     underscored: false,
     underscoredAll: false
