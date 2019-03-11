@@ -44,7 +44,7 @@ function normalizeResponseObject(status = 200, result, message = null, cache = f
         message: (message != null) ? message : httpResponseMessage(status),
         success: (status >= 200 && status <= 299) ? true : false,
         cache,
-        result: (status >= 200 && status <= 299) ? result : null,
+        result
     };
 }
 exports.normalizeResponseObject = normalizeResponseObject;
