@@ -226,8 +226,10 @@ class Routes {
                 let endDate = moment(project.endDate).utcOffset('420')
                 let revisionEndDate = moment(project.revisionEndDate).utcOffset('420')
                 let now = moment().utcOffset('420')
+                let isAfterRevisionEndDate = now.isAfter(moment(revisionEndDate))
+                let isPasscodeValid = verifyPasscode(project.passcode, req, res)
 
-                if (verifyPasscode(project.passcode, req, res) || !now.isAfter(moment(revisionEndDate))) {
+                if (isPasscodeValid && !isAfterRevisionEndDate) {
                     if (timeSlot.isBetween(startDate, endDate, 'days', '[]')) {
                         let options = {
                             where: {
@@ -237,10 +239,16 @@ class Routes {
                         let data = await Session.update({ locationId, timeSlot, timeId }, options)
                         apiResponse(res, 200)
                         return
+                    } else {
+                        apiResponse(res, 400)
+                        return
                     }
+                } else {
+                    console.log('[*] isAfterRevisionEndDate', isAfterRevisionEndDate)
+                    console.log('[*] isPasscodeValid', isPasscodeValid)
+                    apiResponse(res, 400)
+                    return
                 }
-                apiResponse(res, 400)
-                return
             } catch (e) {
                 console.log('[-]', e)
                 apiResponse(res, 500)
