@@ -281,6 +281,7 @@ class Routes {
                     }
                 };
                 let data = yield model_project_1.Project.findOne(options);
+                console.log('[*] data', data);
                 let timeData = yield model_time_1.Time.count(timeOptions);
                 if (data != null && timeData > 0) {
                     let locationId = req.body.locationId;
@@ -290,7 +291,12 @@ class Routes {
                     let registrationStartDate = moment(data.registrationStartDate).utcOffset('420');
                     let registrationEndDate = moment(data.registrationEndDate).utcOffset('420');
                     let isRegisteringInRegistrationSlot = now.isBetween(registrationStartDate, registrationEndDate, 'days', '[]');
-                    if (isRegisteringInRegistrationSlot || md_is_internal_request_1.verifyInternalRequest(req) || util_passcode_1.verifyPasscode(data.passcode, req, res)) {
+                    let isInternalRequest = md_is_internal_request_1.verifyInternalRequest(req);
+                    let isPasscodeValid = util_passcode_1.verifyPasscode(data.passcode, req, res);
+                    console.log('[*] isRegisteringInRegistrationSlot', isRegisteringInRegistrationSlot);
+                    console.log('[*] isInternalRequest', isInternalRequest);
+                    console.log('[*] isPasscodeValid', isPasscodeValid);
+                    if (isRegisteringInRegistrationSlot || isInternalRequest || isPasscodeValid) {
                         if (timeSlot.isBetween(startDate, endDate, 'days', '[]')) {
                             try {
                                 let options = {

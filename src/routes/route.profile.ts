@@ -283,6 +283,7 @@ class Routes {
                     }
                 }
                 let data = await Project.findOne(options)
+                console.log('[*] data', data)
                 let timeData = await Time.count(timeOptions)
                 if (data != null && timeData > 0) {
                     let locationId = req.body.locationId
@@ -292,7 +293,12 @@ class Routes {
                     let registrationStartDate = moment(data.registrationStartDate).utcOffset('420')
                     let registrationEndDate = moment(data.registrationEndDate).utcOffset('420')
                     let isRegisteringInRegistrationSlot = now.isBetween(registrationStartDate, registrationEndDate, 'days', '[]')
-                    if (isRegisteringInRegistrationSlot || verifyInternalRequest(req) || verifyPasscode(data.passcode, req, res)) {
+                    let isInternalRequest = verifyInternalRequest(req)
+                    let isPasscodeValid = verifyPasscode(data.passcode, req, res)
+                    console.log('[*] isRegisteringInRegistrationSlot', isRegisteringInRegistrationSlot)
+                    console.log('[*] isInternalRequest', isInternalRequest)
+                    console.log('[*] isPasscodeValid', isPasscodeValid)
+                    if (isRegisteringInRegistrationSlot || isInternalRequest || isPasscodeValid) {
                         if (timeSlot.isBetween(startDate, endDate, 'days', '[]')) {
                             try {
                                 let options = {
