@@ -6,6 +6,7 @@ export const config = {
         "http://vm1.pondwarit555.com:8000",
         "http://next.fives.cloud",
         "http://localhost:3000",
-        "http://new5558.surge.sh"
+        "http://new5558.surge.sh",
+        "https://cubloodp2.tk"
     ]
 }
