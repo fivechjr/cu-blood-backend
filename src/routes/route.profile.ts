@@ -228,13 +228,21 @@ class Routes {
                 let endDate = moment(project.endDate).utcOffset('420')
                 let revisionEndDate = moment(project.revisionEndDate).utcOffset('420')
                 let now = moment().utcOffset('420')
+                let isInDonationInterval = now.isBetween(startDate, endDate, 'days', '[]')
                 let isAfterRevisionEndDate = now.isAfter(moment(revisionEndDate))
-                let isPasscodeValid = verifyPasscode(project.passcode, req, res)
+                let isPasscodeValid = !isAfterRevisionEndDate ? true : verifyPasscode(project.passcode, req, res)
+                let enableRequest = () => {
+                    console.log('[*] isAfterRevisionEndDate', isAfterRevisionEndDate)
+                    if (isInDonationInterval) {
+                        console.log('[*] isInDonationInverval', isInDonationInterval)
+                        console.log('[*] isPasscodeValid', isPasscodeValid)
+                        return isPasscodeValid
+                    } else {
+                        return !isAfterRevisionEndDate
+                    }
+                }
 
-                console.log('[*] isAfterRevisionEndDate', isAfterRevisionEndDate)
-                console.log('[*] isPasscodeValid', isPasscodeValid)
-
-                if (isPasscodeValid && !isAfterRevisionEndDate) {
+                if (enableRequest()) {
                     if (timeSlot.isBetween(startDate, endDate, 'days', '[]')) {
                         let options = {
                             where: {
