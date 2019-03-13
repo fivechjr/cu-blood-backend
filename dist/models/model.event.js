@@ -7,8 +7,8 @@ exports.Event = util_database_1.sequelize.define('event', {
     body: { type: sequelize_1.default.TEXT },
     location: { type: sequelize_1.default.STRING },
     displayImage: { type: sequelize_1.default.STRING },
-    startDate: { type: sequelize_1.default.DATEONLY },
-    endDate: { type: sequelize_1.default.DATEONLY },
+    startDate: { type: sequelize_1.default.DATE },
+    endDate: { type: sequelize_1.default.DATE },
 }, {
     underscored: false,
     underscoredAll: false

@@ -6,8 +6,8 @@ export const Event = sequelize.define('event', {
     body: {type: Sequelize.TEXT},
     location: {type: Sequelize.STRING},
     displayImage: {type: Sequelize.STRING},
-    startDate: {type: Sequelize.DATEONLY},
-    endDate: {type: Sequelize.DATEONLY},
+    startDate: {type: Sequelize.DATE},
+    endDate: {type: Sequelize.DATE},
 }, {
     underscored: false,
     underscoredAll: false
