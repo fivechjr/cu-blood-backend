@@ -41,7 +41,7 @@ class Routes {
                     return dates
                 }
                 let projectOptions = {
-                    attributes: ['id', 'name', 'registrationStartDate', 'registrationEndDate', 'revisionEndDate', 'startDate', 'endDate'],
+                    attributes: ['id', 'name', 'registrationStartDate', 'registrationEndDate', 'revisionEndDate', 'startDate', 'endDate', 'totalVolume'],
                     order: [['id', 'DESC']],
                     limit: 1
                 }
