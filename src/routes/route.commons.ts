@@ -286,7 +286,7 @@ class Routes {
                     year: req.body.year
                 }
             }
-            let data = await Project.findAll(projectOptions).toJSON()
+            let data = await Project.findAll(projectOptions)
             console.log('[*] data', data)
             console.log('[*] data', typeof data)
             

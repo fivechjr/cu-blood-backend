@@ -273,7 +273,7 @@ class Routes {
                     year: req.body.year
                 }
             };
-            let data = yield model_project_1.Project.findAll(projectOptions).toJSON();
+            let data = yield model_project_1.Project.findAll(projectOptions);
             console.log('[*] data', data);
             console.log('[*] data', typeof data);
             for (const [index, value] of data.entries()) {
