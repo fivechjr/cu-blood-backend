@@ -271,12 +271,14 @@ class Routes {
                 order: [['id', 'DESC']],
                 where: {
                     year: req.params.year
-                }
+                },
+                raw: true
             };
             let data = yield model_project_1.Project.findAll(projectOptions);
             console.log('[*] data', data);
             console.log('[*] data', typeof data);
             for (const [index, value] of data.entries()) {
+                console.log('[*] value', value);
                 let popularTimes = yield util_database_1.sequelize.query('SELECT count(sessions.id) as count, times.id, times."label", times."startTime", times."endTime" FROM sessions LEFT JOIN times ON times.id = sessions."timeId" WHERE sessions."projectId" = ' + value.id + ' GROUP BY times.id', { type: util_database_1.sequelize.QueryTypes.SELECT });
                 popularTimes.forEach((v, i) => {
                     popularTimes[i].count = Number(v.count);
