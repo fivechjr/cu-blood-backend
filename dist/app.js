@@ -1,4 +1,8 @@
 "use strict";
+// 
+// CU Blood Application Programming Interface (API)
+// Patcharapat Chaijaroen
+// 
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv = require("dotenv");
 const express = require("express");

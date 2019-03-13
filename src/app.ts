@@ -1,3 +1,9 @@
+// 
+// CU Blood Application Programming Interface (API)
+// Patcharapat Chaijaroen
+// 
+
+
 import * as dotenv from 'dotenv'
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
