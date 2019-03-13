@@ -8,7 +8,8 @@ export const Project = sequelize.define('project', {
     startDate: {type: Sequelize.DATE},
     endDate: {type: Sequelize.DATE},
     revisionEndDate: {type: Sequelize.DATE},
-    passcode: {type: Sequelize.STRING}
+    passcode: {type: Sequelize.STRING},
+    totalVolume: {type: Sequelize.INTEGER}
 }, {
     underscored: false,
     underscoredAll: false
