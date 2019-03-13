@@ -62,6 +62,15 @@ class Routes {
                 let schools = await School.findAll(schoolOptions)
                 let times = await Time.findAll(timeOptions)
                 let result = data[0].toJSON()
+                let firstTimeEnrollmentCount = await sequelize.query('SELECT COUNT(*) FROM (SELECT sessions."projectId", sessions."userId" FROM sessions GROUP BY 1, sessions."userId" HAVING COUNT(*) = 1) AS s WHERE s."projectId" = ' + result.id, { type: sequelize.QueryTypes.SELECT })
+                let popularTimes = await sequelize.query('SELECT count(sessions.id) as count, times.id, times."label", times."startTime", times."endTime" FROM sessions LEFT JOIN times ON times.id = sessions."timeId" WHERE sessions."projectId" = ' + result.id + ' GROUP BY times.id', { type: sequelize.QueryTypes.SELECT })
+                popularTimes.forEach((v, i) => {
+                    popularTimes[i].count = Number(v.count)
+                })
+                result.statistics = {
+                    firstTimeEnrollmentCount: Number(firstTimeEnrollmentCount[0].count),
+                    popularTimes
+                }
                 result.locations = locations
                 result.schools = schools
                 result.startDate = moment(result.startDate).utcOffset(420).format()

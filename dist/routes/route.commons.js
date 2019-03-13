@@ -71,6 +71,15 @@ class Routes {
                 let schools = yield model_school_1.School.findAll(schoolOptions);
                 let times = yield model_time_1.Time.findAll(timeOptions);
                 let result = data[0].toJSON();
+                let firstTimeEnrollmentCount = yield util_database_1.sequelize.query('SELECT COUNT(*) FROM (SELECT sessions."projectId", sessions."userId" FROM sessions GROUP BY 1, sessions."userId" HAVING COUNT(*) = 1) AS s WHERE s."projectId" = ' + result.id, { type: util_database_1.sequelize.QueryTypes.SELECT });
+                let popularTimes = yield util_database_1.sequelize.query('SELECT count(sessions.id) as count, times.id, times."label", times."startTime", times."endTime" FROM sessions LEFT JOIN times ON times.id = sessions."timeId" WHERE sessions."projectId" = ' + result.id + ' GROUP BY times.id', { type: util_database_1.sequelize.QueryTypes.SELECT });
+                popularTimes.forEach((v, i) => {
+                    popularTimes[i].count = Number(v.count);
+                });
+                result.statistics = {
+                    firstTimeEnrollmentCount: Number(firstTimeEnrollmentCount[0].count),
+                    popularTimes
+                };
                 result.locations = locations;
                 result.schools = schools;
                 result.startDate = moment(result.startDate).utcOffset(420).format();
