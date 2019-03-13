@@ -275,7 +275,7 @@ class Routes {
         // })
 
         this.router.get('/insights/:year', [
-            param('projectId').isInt().not().isEmpty(),
+            param('year').isInt().not().isEmpty(),
             isValidated,
             isCached
         ], async (req: PassportRequestEntity, res: Response) => {

@@ -262,7 +262,7 @@ class Routes {
         //     }
         // })
         this.router.get('/insights/:year', [
-            check_1.param('projectId').isInt().not().isEmpty(),
+            check_1.param('year').isInt().not().isEmpty(),
             util_validation_1.isValidated,
             md_is_cached_1.isCached
         ], (req, res) => __awaiter(this, void 0, void 0, function* () {
