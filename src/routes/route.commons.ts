@@ -287,6 +287,8 @@ class Routes {
                 }
             }
             let data = await Project.findAll(projectOptions).toJSON()
+            console.log('[*] data', data)
+            console.log('[*] data', typeof data)
             
             for (const [index, value] of data.entries()) {
                 let popularTimes = await sequelize.query('SELECT count(sessions.id) as count, times.id, times."label", times."startTime", times."endTime" FROM sessions LEFT JOIN times ON times.id = sessions."timeId" WHERE sessions."projectId" = ' + value.id + ' GROUP BY times.id', { type: sequelize.QueryTypes.SELECT })
