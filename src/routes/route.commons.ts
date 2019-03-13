@@ -283,7 +283,7 @@ class Routes {
                 attributes: ['id', 'name', 'registrationStartDate', 'registrationEndDate', 'revisionEndDate', 'startDate', 'endDate', 'totalVolume', 'firstEnrollmentCount', 'year'],
                 order: [['id', 'DESC']],
                 where: {
-                    year: req.body.year
+                    year: req.params.year
                 }
             }
             let data = await Project.findAll(projectOptions)

@@ -270,7 +270,7 @@ class Routes {
                 attributes: ['id', 'name', 'registrationStartDate', 'registrationEndDate', 'revisionEndDate', 'startDate', 'endDate', 'totalVolume', 'firstEnrollmentCount', 'year'],
                 order: [['id', 'DESC']],
                 where: {
-                    year: req.body.year
+                    year: req.params.year
                 }
             };
             let data = yield model_project_1.Project.findAll(projectOptions);
