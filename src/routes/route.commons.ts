@@ -41,7 +41,7 @@ class Routes {
                     return dates
                 }
                 let projectOptions = {
-                    attributes: ['id', 'name', 'registrationStartDate', 'registrationEndDate', 'revisionEndDate', 'startDate', 'endDate', 'totalVolume'],
+                    attributes: ['id', 'name', 'registrationStartDate', 'registrationEndDate', 'revisionEndDate', 'startDate', 'endDate', 'totalVolume', 'firstEnrollmentCount', 'year'],
                     order: [['id', 'DESC']],
                     limit: 1
                 }
@@ -62,13 +62,13 @@ class Routes {
                 let schools = await School.findAll(schoolOptions)
                 let times = await Time.findAll(timeOptions)
                 let result = data[0].toJSON()
-                let firstTimeEnrollmentCount = await sequelize.query('SELECT COUNT(*) FROM (SELECT sessions."projectId", sessions."userId" FROM sessions GROUP BY 1, sessions."userId" HAVING COUNT(*) = 1) AS s WHERE s."projectId" = ' + result.id, { type: sequelize.QueryTypes.SELECT })
+                // let firstTimeEnrollmentCount = await sequelize.query('SELECT COUNT(*) FROM (SELECT sessions."projectId", sessions."userId" FROM sessions GROUP BY 1, sessions."userId" HAVING COUNT(*) = 1) AS s WHERE s."projectId" = ' + result.id, { type: sequelize.QueryTypes.SELECT })
                 let popularTimes = await sequelize.query('SELECT count(sessions.id) as count, times.id, times."label", times."startTime", times."endTime" FROM sessions LEFT JOIN times ON times.id = sessions."timeId" WHERE sessions."projectId" = ' + result.id + ' GROUP BY times.id', { type: sequelize.QueryTypes.SELECT })
                 popularTimes.forEach((v, i) => {
                     popularTimes[i].count = Number(v.count)
                 })
                 result.statistics = {
-                    firstTimeEnrollmentCount: Number(firstTimeEnrollmentCount[0].count),
+                    // firstTimeEnrollmentCount: Number(firstTimeEnrollmentCount[0].count),
                     popularTimes
                 }
                 result.locations = locations
@@ -207,7 +207,7 @@ class Routes {
             param('year').isInt().not().isEmpty(),
             isValidated
         ], async (req: PassportRequestEntity, res: Response) => {
-            sequelize.query('SELECT users."bloodType", count(sessions.id) as count FROM users LEFT JOIN sessions ON users.id = sessions."userId" WHERE EXTRACT(year FROM sessions."checkOut") = ? GROUP BY 1, users."bloodType"', { replacements: [req.params.year], type: sequelize.QueryTypes.SELECT}).then(d => {
+            sequelize.query('SELECT users."bloodType", count(sessions.id) as count FROM users LEFT JOIN sessions ON users.id = sessions."userId" WHERE EXTRACT(year FROM sessions."checkOut") = ? AND sessions."status" = 1 GROUP BY 1, users."bloodType"', { replacements: [req.params.year], type: sequelize.QueryTypes.SELECT}).then(d => {
                 // console.log(chalk.bgYellow(d))
                 apiResponse(res, 200, d, null, false, req.cacheKey, 60)
             }).catch(e => {
@@ -273,6 +273,31 @@ class Routes {
         //         apiResponse(res, 500, e)
         //     }
         // })
+
+        this.router.get('/insights/:year', [
+            param('projectId').isInt().not().isEmpty(),
+            isValidated,
+            isCached
+        ], async (req: PassportRequestEntity, res: Response) => {
+            let projectOptions = {
+                attributes: ['id', 'name', 'registrationStartDate', 'registrationEndDate', 'revisionEndDate', 'startDate', 'endDate', 'totalVolume', 'firstEnrollmentCount', 'year'],
+                order: [['id', 'DESC']],
+                where: {
+                    year: req.body.year
+                }
+            }
+            let data = await Project.findAll(projectOptions).toJSON()
+            
+            for (const [index, value] of data.entries()) {
+                let popularTimes = await sequelize.query('SELECT count(sessions.id) as count, times.id, times."label", times."startTime", times."endTime" FROM sessions LEFT JOIN times ON times.id = sessions."timeId" WHERE sessions."projectId" = ' + value.id + ' GROUP BY times.id', { type: sequelize.QueryTypes.SELECT })
+                popularTimes.forEach((v, i) => {
+                    popularTimes[i].count = Number(v.count)
+                })
+                data[index].popularTimes = popularTimes
+            }
+
+            apiResponse(res, 200, data, null, false, req.cacheKey, 60)
+        })
 
         this.router.get('/facebook/posts', [
             isCached

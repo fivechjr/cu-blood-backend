@@ -9,7 +9,9 @@ export const Project = sequelize.define('project', {
     endDate: {type: Sequelize.DATE},
     revisionEndDate: {type: Sequelize.DATE},
     passcode: {type: Sequelize.STRING},
-    totalVolume: {type: Sequelize.INTEGER}
+    totalVolume: {type: Sequelize.INTEGER},
+    firstEnrollmentCount: {type: Sequelize.INTEGER},
+    year: {type: Sequelize.INTEGER}
 }, {
     underscored: false,
     underscoredAll: false
