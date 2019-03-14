@@ -164,7 +164,7 @@ class Routes {
                     1: 'Foreigner'
                 }[n];
             };
-            console.log('[*] d', d);
+            // console.log('[*] d', d)
             d.forEach(z => {
                 // delete z.id
                 delete z.projectId;

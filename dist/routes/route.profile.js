@@ -21,7 +21,6 @@ const md_is_internal_request_1 = require("../middlewares/md.is-internal-request"
 require("../utils/util.passport");
 const moment = require("moment");
 const model_time_1 = require("../models/model.time");
-const chalk_1 = require("chalk");
 const util_passcode_1 = require("../utils/util.passcode");
 class Routes {
     constructor() {
@@ -291,7 +290,7 @@ class Routes {
                     }
                 };
                 let data = yield model_project_1.Project.findOne(options);
-                console.log('[*] data', data);
+                // console.log('[*] data', data)
                 let timeData = yield model_time_1.Time.count(timeOptions);
                 if (data != null && timeData > 0) {
                     let locationId = req.body.locationId;
@@ -303,9 +302,9 @@ class Routes {
                     let isRegisteringInRegistrationSlot = now.isBetween(registrationStartDate, registrationEndDate, 'days', '[]');
                     let isInternalRequest = md_is_internal_request_1.verifyInternalRequest(req);
                     let isPasscodeValid = util_passcode_1.verifyPasscode(data.passcode, req, res);
-                    console.log('[*] isRegisteringInRegistrationSlot', isRegisteringInRegistrationSlot);
-                    console.log('[*] isInternalRequest', isInternalRequest);
-                    console.log('[*] isPasscodeValid', isPasscodeValid);
+                    // console.log('[*] isRegisteringInRegistrationSlot', isRegisteringInRegistrationSlot)
+                    // console.log('[*] isInternalRequest', isInternalRequest)
+                    // console.log('[*] isPasscodeValid', isPasscodeValid)
                     if (isRegisteringInRegistrationSlot || isInternalRequest || isPasscodeValid) {
                         if (timeSlot.isBetween(startDate, endDate, 'days', '[]')) {
                             try {
@@ -324,7 +323,7 @@ class Routes {
                                 };
                                 let check = yield model_session_1.Session.count(options);
                                 if (check > 0) {
-                                    console.log('[-] check > 0', check);
+                                    // console.log('[-] check > 0', check)
                                     util_response_1.apiResponse(res, 400);
                                     return;
                                 }
@@ -335,32 +334,32 @@ class Routes {
                                 return;
                             }
                             catch (e) {
-                                console.log(chalk_1.default.bgRed('ERROR'));
+                                // console.log(chalk.bgRed('ERROR'))
                                 console.log(e);
                                 util_response_1.apiResponse(res, 500);
                                 return;
                             }
                         }
                         else {
-                            console.log('[-] timeSlot isBetween');
+                            // console.log('[-] timeSlot isBetween')
                             util_response_1.apiResponse(res, 400);
                             return;
                         }
                     }
                     else {
-                        console.log('[-] now isBetween (registrationDate)');
+                        // console.log('[-] now isBetween (registrationDate)')
                         util_response_1.apiResponse(res, 400);
                         return;
                     }
                 }
                 else {
-                    console.log('[-] project === null || timeData < 0');
+                    // console.log('[-] project === null || timeData < 0')
                     util_response_1.apiResponse(res, 400);
                     return;
                 }
             }
             catch (e) {
-                console.log('[-]', e);
+                console.log(e);
                 util_response_1.apiResponse(res, 500);
                 return;
             }

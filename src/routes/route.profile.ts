@@ -291,7 +291,7 @@ class Routes {
                     }
                 }
                 let data = await Project.findOne(options)
-                console.log('[*] data', data)
+                // console.log('[*] data', data)
                 let timeData = await Time.count(timeOptions)
                 if (data != null && timeData > 0) {
                     let locationId = req.body.locationId
@@ -303,9 +303,9 @@ class Routes {
                     let isRegisteringInRegistrationSlot = now.isBetween(registrationStartDate, registrationEndDate, 'days', '[]')
                     let isInternalRequest = verifyInternalRequest(req)
                     let isPasscodeValid = verifyPasscode(data.passcode, req, res)
-                    console.log('[*] isRegisteringInRegistrationSlot', isRegisteringInRegistrationSlot)
-                    console.log('[*] isInternalRequest', isInternalRequest)
-                    console.log('[*] isPasscodeValid', isPasscodeValid)
+                    // console.log('[*] isRegisteringInRegistrationSlot', isRegisteringInRegistrationSlot)
+                    // console.log('[*] isInternalRequest', isInternalRequest)
+                    // console.log('[*] isPasscodeValid', isPasscodeValid)
                     if (isRegisteringInRegistrationSlot || isInternalRequest || isPasscodeValid) {
                         if (timeSlot.isBetween(startDate, endDate, 'days', '[]')) {
                             try {
@@ -324,7 +324,7 @@ class Routes {
                                 }
                                 let check = await Session.count(options)
                                 if (check > 0) {
-                                    console.log('[-] check > 0', check)
+                                    // console.log('[-] check > 0', check)
                                     apiResponse(res, 400)
                                     return
                                 }
@@ -334,28 +334,28 @@ class Routes {
                                 apiResponse(res, 200, toSessionEntity(session))
                                 return
                             } catch (e) {
-                                console.log(chalk.bgRed('ERROR'))
+                                // console.log(chalk.bgRed('ERROR'))
                                 console.log(e)
                                 apiResponse(res, 500)
                                 return
                             }
                         } else {
-                            console.log('[-] timeSlot isBetween')
+                            // console.log('[-] timeSlot isBetween')
                             apiResponse(res, 400)
                             return
                         }
                     } else {
-                        console.log('[-] now isBetween (registrationDate)')
+                        // console.log('[-] now isBetween (registrationDate)')
                         apiResponse(res, 400)
                         return
                     }
                 } else {
-                    console.log('[-] project === null || timeData < 0')
+                    // console.log('[-] project === null || timeData < 0')
                     apiResponse(res, 400)
                     return
                 }
             } catch (e) {
-                console.log('[-]', e)
+                console.log(e)
                 apiResponse(res, 500)
                 return
             }
