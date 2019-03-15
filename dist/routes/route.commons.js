@@ -63,7 +63,7 @@ class Routes {
                     order: [['id', 'ASC']],
                 };
                 let timeOptions = {
-                    attributes: ['id', 'startTime', 'endTime', 'label'],
+                    attributes: ['id', 'startTime', 'endTime', 'label', 'isSunday', 'isMonday', 'isTuesday', 'isWednesday', 'isThursday', 'isFriday', 'isSunday'],
                     order: [['id', 'ASC']],
                 };
                 let data = yield model_project_1.Project.findAll(projectOptions);
