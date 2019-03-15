@@ -14,7 +14,14 @@ exports.Time = util_database_1.sequelize.define('times', {
     label: {
         type: sequelize_1.default.STRING,
         allowNull: false
-    }
+    },
+    isSunday: { type: sequelize_1.default.INTEGER },
+    isMonday: { type: sequelize_1.default.INTEGER },
+    isTuesday: { type: sequelize_1.default.INTEGER },
+    isWednesday: { type: sequelize_1.default.INTEGER },
+    isThursday: { type: sequelize_1.default.INTEGER },
+    isFriday: { type: sequelize_1.default.INTEGER },
+    isSaturday: { type: sequelize_1.default.INTEGER }
 }, {
     underscored: false,
     underscoredAll: false

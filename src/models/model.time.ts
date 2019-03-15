@@ -13,7 +13,14 @@ export const Time = sequelize.define('times', {
     label: {
         type: Sequelize.STRING,
         allowNull: false
-    }
+    },
+    isSunday: { type: Sequelize.INTEGER },
+    isMonday: { type: Sequelize.INTEGER },
+    isTuesday: { type: Sequelize.INTEGER },
+    isWednesday: { type: Sequelize.INTEGER },
+    isThursday: { type: Sequelize.INTEGER },
+    isFriday: { type: Sequelize.INTEGER },
+    isSaturday: { type: Sequelize.INTEGER }
 }, {
     underscored: false,
     underscoredAll: false
