@@ -54,7 +54,7 @@ class Routes {
                     order: [['id', 'ASC']],
                 }
                 let timeOptions = {
-                    attributes: ['id', 'startTime', 'endTime', 'label', 'isSunday', 'isMonday', 'isTuesday', 'isWednesday', 'isThursday', 'isFriday', 'isSunday'],
+                    attributes: ['id', 'startTime', 'endTime', 'label', 'isSunday', 'isMonday', 'isTuesday', 'isWednesday', 'isThursday', 'isFriday', 'isSaturday'],
                     order: [['id', 'ASC']],
                 }
                 let data = await Project.findAll(projectOptions)
