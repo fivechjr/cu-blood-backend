@@ -14,13 +14,13 @@ export const Time = sequelize.define('times', {
         type: Sequelize.STRING,
         allowNull: false
     },
-    isSunday: { type: Sequelize.INTEGER },
-    isMonday: { type: Sequelize.INTEGER },
-    isTuesday: { type: Sequelize.INTEGER },
-    isWednesday: { type: Sequelize.INTEGER },
-    isThursday: { type: Sequelize.INTEGER },
-    isFriday: { type: Sequelize.INTEGER },
-    isSaturday: { type: Sequelize.INTEGER }
+    sunday: { type: Sequelize.INTEGER },
+    monday: { type: Sequelize.INTEGER },
+    tuesday: { type: Sequelize.INTEGER },
+    wednesday: { type: Sequelize.INTEGER },
+    thursday: { type: Sequelize.INTEGER },
+    friday: { type: Sequelize.INTEGER },
+    saturday: { type: Sequelize.INTEGER }
 }, {
     underscored: false,
     underscoredAll: false

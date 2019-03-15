@@ -15,13 +15,13 @@ exports.Time = util_database_1.sequelize.define('times', {
         type: sequelize_1.default.STRING,
         allowNull: false
     },
-    isSunday: { type: sequelize_1.default.INTEGER },
-    isMonday: { type: sequelize_1.default.INTEGER },
-    isTuesday: { type: sequelize_1.default.INTEGER },
-    isWednesday: { type: sequelize_1.default.INTEGER },
-    isThursday: { type: sequelize_1.default.INTEGER },
-    isFriday: { type: sequelize_1.default.INTEGER },
-    isSaturday: { type: sequelize_1.default.INTEGER }
+    sunday: { type: sequelize_1.default.INTEGER },
+    monday: { type: sequelize_1.default.INTEGER },
+    tuesday: { type: sequelize_1.default.INTEGER },
+    wednesday: { type: sequelize_1.default.INTEGER },
+    thursday: { type: sequelize_1.default.INTEGER },
+    friday: { type: sequelize_1.default.INTEGER },
+    saturday: { type: sequelize_1.default.INTEGER }
 }, {
     underscored: false,
     underscoredAll: false
