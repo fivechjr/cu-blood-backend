@@ -120,7 +120,9 @@ function toBasicSessionEntity(s) {
             firstName: user.firstName,
             lastName: user.lastName,
             gender: user.gender,
-            username: user.username
+            username: user.username,
+            bloodType: user.bloodType,
+            shirtSize: user.shirtSize
         },
         location: {
             name: location.nameTH
