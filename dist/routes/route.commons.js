@@ -202,7 +202,7 @@ class Routes {
             check_1.param('year').isInt().not().isEmpty(),
             util_validation_1.isValidated
         ], (req, res) => __awaiter(this, void 0, void 0, function* () {
-            util_database_1.sequelize.query('SELECT users."bloodType", count(sessions.id) as count FROM users LEFT JOIN sessions ON users.id = sessions."userId" WHERE EXTRACT(year FROM sessions."checkOut") = ? AND sessions."status" = 1 GROUP BY 1, users."bloodType"', { replacements: [req.params.year], type: util_database_1.sequelize.QueryTypes.SELECT }).then(d => {
+            util_database_1.sequelize.query('SELECT users."bloodType", count(sessions.id) as count FROM users LEFT JOIN sessions ON users.id = sessions."userId" WHERE EXTRACT(year FROM sessions."checkOut") = ? AND sessions."status" = 2 GROUP BY 1, users."bloodType"', { replacements: [req.params.year], type: util_database_1.sequelize.QueryTypes.SELECT }).then(d => {
                 // console.log(chalk.bgYellow(d))
                 util_response_1.apiResponse(res, 200, d, null, false, req.cacheKey, 60);
             }).catch(e => {

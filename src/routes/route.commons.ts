@@ -207,7 +207,7 @@ class Routes {
             param('year').isInt().not().isEmpty(),
             isValidated
         ], async (req: PassportRequestEntity, res: Response) => {
-            sequelize.query('SELECT users."bloodType", count(sessions.id) as count FROM users LEFT JOIN sessions ON users.id = sessions."userId" WHERE EXTRACT(year FROM sessions."checkOut") = ? AND sessions."status" = 1 GROUP BY 1, users."bloodType"', { replacements: [req.params.year], type: sequelize.QueryTypes.SELECT}).then(d => {
+            sequelize.query('SELECT users."bloodType", count(sessions.id) as count FROM users LEFT JOIN sessions ON users.id = sessions."userId" WHERE EXTRACT(year FROM sessions."checkOut") = ? AND sessions."status" = 2 GROUP BY 1, users."bloodType"', { replacements: [req.params.year], type: sequelize.QueryTypes.SELECT}).then(d => {
                 // console.log(chalk.bgYellow(d))
                 apiResponse(res, 200, d, null, false, req.cacheKey, 60)
             }).catch(e => {
